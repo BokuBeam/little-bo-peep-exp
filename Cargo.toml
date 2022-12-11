@@ -1,0 +1,17 @@
+[package]
+name = "little-bo-peep-exp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.6.1"
+axum-extra = { version = "0.4.2", features = ["spa"] }
+tokio = { version = "1.23.0", features = ["full"] }
+tower = "0.4.13"
+tower-http = { version = "0.3.5", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+
+[[bin]]
+name = "little-bo-peep-exp"
+path = "backend/main.rs"

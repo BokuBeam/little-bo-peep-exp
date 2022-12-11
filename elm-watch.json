@@ -1,0 +1,10 @@
+{
+    "targets": {
+        "dev": {
+            "inputs": [
+                "frontend/src/Main.elm"
+            ],
+            "output": "dist/elm.js"
+        }
+    }
+}

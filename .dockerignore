@@ -1,0 +1,12 @@
+# flyctl launch added from .gitignore
+target
+
+
+ Frontend
+
+**/**/node_modules
+**/**/elm-stuff
+**/**/dist
+**/**/.parcel-cache
+
+fly.toml
