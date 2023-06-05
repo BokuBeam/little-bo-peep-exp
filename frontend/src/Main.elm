@@ -20,13 +20,13 @@ main =
 
 
 type alias Model =
-    { source : Maybe String
+    { article : Maybe String
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( { source = Nothing }
+    ( { article = Nothing }
     , Http.get
         { url = "/articles/ch_1.emu"
         , expect = Http.expectString GotArticle
@@ -48,7 +48,7 @@ update msg model =
         GotArticle result ->
             case result of
                 Ok src ->
-                    ( { model | source = Just src }
+                    ( { model | article = Just src }
                     , Cmd.none
                     )
 
@@ -68,7 +68,7 @@ view model =
             [ Attr.class "w-full"
             ]
             [ Header.view
-            , Article.view model.source
+            , Article.view model.article
             ]
         ]
     }

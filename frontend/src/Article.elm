@@ -16,7 +16,7 @@ view maybeSource =
         Just source ->
             case Mark.compile document source of
                 Mark.Success html ->
-                    Html.div [] html.body
+                    Html.div [ Attr.class "w-full px-4" ] html.body
 
                 Mark.Almost { result, errors } ->
                     -- This is the case where there has been an error,
@@ -126,7 +126,7 @@ thought : Mark.Block (Html msg)
 thought =
     Mark.record "Thought"
         (\img body ->
-            Html.div [ Attr.class "relative h-0" ]
+            Html.div [ Attr.class "relative h-full" ]
                 [ Html.img [ Attr.src img, Attr.class "absolute inset-full" ] []
                 , Html.span [ Attr.class "w-full absolute inset-full" ] [ Html.text body ]
                 ]
