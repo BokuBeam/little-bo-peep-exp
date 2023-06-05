@@ -16,7 +16,7 @@ view maybeSource =
         Just source ->
             case Mark.compile document source of
                 Mark.Success html ->
-                    Html.div [ Attr.class "w-full px-4" ] html.body
+                    Html.div [ Attr.class "w-full" ] html.body
 
                 Mark.Almost { result, errors } ->
                     -- This is the case where there has been an error,
@@ -51,10 +51,10 @@ document =
             , body =
                 [ Html.div
                     [ Attr.class "font-baskerville"
-                    , Attr.class "w-full"
-                    , Attr.class "grid gap-4 grid-cols-3"
+                    , Attr.style "width" "300%"
+                    , Attr.class "grid gap-0 items-center grid-cols-3"
                     ]
-                    (Html.h1 [ Attr.class "text-4xl py-8 col-start-2" ] meta.title
+                    (Html.h1 [ Attr.class "text-4xl py-8 col-start-2 px-4" ] meta.title
                         :: body
                     )
                 ]
@@ -65,7 +65,7 @@ document =
             Mark.manyOf
                 [ math
                 , thought
-                , Mark.map (Html.p [ Attr.class "text-xl col-start-2" ]) text
+                , Mark.map (Html.p [ Attr.class "text-xl col-start-2 px-4" ]) text
                 ]
         }
 
@@ -147,7 +147,7 @@ math =
                     String.concat [ "$$", "\n", str, "\n", "$$" ]
             in
             Html.div
-                [ Attr.class "py-6 text-l col-start-2" ]
+                [ Attr.class "py-6 px-4 text-l col-start-2" ]
                 [ Html.text padded ]
         )
         Mark.string

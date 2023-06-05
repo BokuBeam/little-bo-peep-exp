@@ -65,7 +65,7 @@ view model =
     { title = "Little Bo Peep"
     , body =
         [ Html.div
-            [ Attr.class "w-full"
+            [ Attr.class ""
             ]
             [ Header.view
             , Article.view model.article
