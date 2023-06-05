@@ -49,12 +49,14 @@ document =
         (\meta body ->
             { metadata = meta
             , body =
-                [ Html.div [ Attr.class "flex justify-center font-baskerville" ]
-                    [ Html.div [ Attr.class "w-128" ]
-                        (Html.h1 [ Attr.class "text-4xl py-8" ] meta.title
-                            :: body
-                        )
+                [ Html.div
+                    [ Attr.class "font-baskerville"
+                    , Attr.class "w-full"
+                    , Attr.class "grid gap-4 grid-cols-3"
                     ]
+                    (Html.h1 [ Attr.class "text-4xl py-8 col-start-2" ] meta.title
+                        :: body
+                    )
                 ]
             }
         )
@@ -63,7 +65,7 @@ document =
             Mark.manyOf
                 [ math
                 , thought
-                , Mark.map (Html.p [ Attr.class "text-xl" ]) text
+                , Mark.map (Html.p [ Attr.class "text-xl col-start-2" ]) text
                 ]
         }
 
@@ -126,9 +128,9 @@ thought : Mark.Block (Html msg)
 thought =
     Mark.record "Thought"
         (\img body ->
-            Html.div [ Attr.class "relative h-full" ]
-                [ Html.img [ Attr.src img, Attr.class "absolute inset-full" ] []
-                , Html.span [ Attr.class "w-full absolute inset-full" ] [ Html.text body ]
+            Html.div [ Attr.class "col-start-3 grid items-center" ]
+                [ Html.img [ Attr.src img, Attr.class "col-start-1 row-start-1" ] []
+                , Html.span [ Attr.class "col-start-1 row-start-1" ] [ Html.text body ]
                 ]
         )
         |> Mark.field "img" Mark.string
@@ -145,7 +147,7 @@ math =
                     String.concat [ "$$", "\n", str, "\n", "$$" ]
             in
             Html.div
-                [ Attr.class "py-6 text-l" ]
+                [ Attr.class "py-6 text-l col-start-2" ]
                 [ Html.text padded ]
         )
         Mark.string
