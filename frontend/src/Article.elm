@@ -51,8 +51,8 @@ document =
             , body =
                 [ Html.div
                     [ Attr.class "font-baskerville"
-                    , Attr.style "width" "300%"
                     , Attr.class "grid gap-0 items-center grid-cols-3"
+                    , Attr.class "w-3/1 md:w-384"
                     ]
                     (Html.h1 [ Attr.class "text-4xl py-8 col-start-2 px-4" ] meta.title
                         :: body
