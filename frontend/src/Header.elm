@@ -9,7 +9,7 @@ view : Html msg
 view =
     Html.div
         [ Attr.class "grid gap-0 items-center grid-cols-3"
-        , Attr.class "w-3/1 md:w-384"
+        , Attr.class "w-3/1 md:w-300"
         , Attr.class "border-b-2 border-t-10"
         , Attr.class "py-4"
         ]

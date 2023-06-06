@@ -52,7 +52,7 @@ document =
                 [ Html.div
                     [ Attr.class "font-baskerville"
                     , Attr.class "grid gap-0 items-center grid-cols-3"
-                    , Attr.class "w-3/1 md:w-384"
+                    , Attr.class "w-3/1 md:w-300"
                     ]
                     (Html.h1 [ Attr.class "text-4xl py-8 col-start-2 px-4" ] meta.title
                         :: body
@@ -84,11 +84,7 @@ text =
                 (\str ->
                     let
                         padded =
-                            String.concat
-                                [ "$"
-                                , str
-                                , "$"
-                                ]
+                            String.concat [ "$", str, "$" ]
                     in
                     Html.span [] [ Html.text padded ]
                 )
@@ -104,13 +100,17 @@ viewText :
     -> String
     -> Html msg
 viewText styles string =
-    Html.span
-        [ Attr.classList
-            [ ( "font-baskerville-bold", styles.bold )
-            , ( "font-baskerville-italic", styles.italic )
+    if styles.bold || styles.italic then
+        Html.span
+            [ Attr.classList
+                [ ( "font-baskerville-bold", styles.bold )
+                , ( "font-baskerville-italic", styles.italic )
+                ]
             ]
-        ]
-        [ Html.text string ]
+            [ Html.text string ]
+
+    else
+        Html.text string
 
 
 metadata : Mark.Block { title : List (Html msg) }
@@ -130,7 +130,7 @@ thought =
         (\img body ->
             Html.div [ Attr.class "col-start-3 grid items-center" ]
                 [ Html.img [ Attr.src img, Attr.class "col-start-1 row-start-1" ] []
-                , Html.span [ Attr.class "col-start-1 row-start-1" ] [ Html.text body ]
+                , Html.span [ Attr.class "text-xl col-start-1 row-start-1" ] [ Html.text body ]
                 ]
         )
         |> Mark.field "img" Mark.string
@@ -144,10 +144,10 @@ math =
         (\str ->
             let
                 padded =
-                    String.concat [ "$$", "\n", str, "\n", "$$" ]
+                    String.concat [ "$$", str, "$$" ]
             in
             Html.div
-                [ Attr.class "py-6 px-4 text-l col-start-2" ]
+                [ Attr.class "px-4 text-xl col-start-2" ]
                 [ Html.text padded ]
         )
         Mark.string
