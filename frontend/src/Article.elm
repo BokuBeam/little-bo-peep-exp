@@ -86,7 +86,7 @@ text =
                         padded =
                             String.concat [ "$", str, "$" ]
                     in
-                    Html.span [] [ Html.text padded ]
+                    Html.text padded
                 )
             ]
         }
@@ -127,14 +127,34 @@ metadata =
 thought : Mark.Block (Html msg)
 thought =
     Mark.record "Thought"
-        (\img body ->
-            Html.div [ Attr.class "col-start-3 grid items-center" ]
-                [ Html.img [ Attr.src img, Attr.class "col-start-1 row-start-1" ] []
-                , Html.span [ Attr.class "text-xl col-start-1 row-start-1" ] [ Html.text body ]
+        (\img body position offset childOffset ->
+            Html.div
+                [ Attr.class <|
+                    if position == "left" then
+                        "col-start-1"
+
+                    else
+                        "col-start-3"
+                , Attr.class "grid items-center"
+                , Attr.style "transform" ("translate" ++ offset)
+                ]
+                [ Html.img
+                    [ Attr.src img
+                    , Attr.class "col-start-1 row-start-1"
+                    ]
+                    []
+                , Html.span
+                    [ Attr.class "text-xl col-start-1 row-start-1"
+                    , Attr.style "transform" ("translate" ++ childOffset)
+                    ]
+                    [ Html.text body ]
                 ]
         )
         |> Mark.field "img" Mark.string
         |> Mark.field "body" Mark.string
+        |> Mark.field "position" Mark.string
+        |> Mark.field "offset" Mark.string
+        |> Mark.field "childOffset" Mark.string
         |> Mark.toBlock
 
 

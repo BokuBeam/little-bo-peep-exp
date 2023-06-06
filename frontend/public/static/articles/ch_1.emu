@@ -14,6 +14,9 @@ are both positive. But `\sqrt{4}`{math} is, by definition, the unique /nonnegati
 |> Thought
     img = images/svg_cloud_minus_two_squared.svg
     body = $(-2)^2 = 4,\,\, \sqrt{4} = 2$
+    position = right
+    offset = (-32px, 0)
+    childOffset = (136px, 9px)
 
 and, in particular, it is /not/ true that
 
