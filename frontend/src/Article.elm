@@ -83,10 +83,10 @@ text =
             [ Mark.verbatim "math"
                 (\str ->
                     let
-                        padded =
+                        mathText =
                             String.concat [ "$", str, "$" ]
                     in
-                    Html.text padded
+                    Html.span [] [ Html.text mathText ]
                 )
             ]
         }
@@ -107,10 +107,11 @@ viewText styles string =
                 , ( "font-baskerville-italic", styles.italic )
                 ]
             ]
-            [ Html.text string ]
+            [ Html.text string
+            ]
 
     else
-        Html.text string
+        Html.span [] [ Html.text string ]
 
 
 metadata : Mark.Block { title : List (Html msg) }
