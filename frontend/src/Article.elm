@@ -135,7 +135,7 @@ thought =
 
                     else
                         "col-start-3"
-                , Attr.class "grid items-center"
+                , Attr.class "grid items-center h-0"
                 , Attr.style "transform" ("translate" ++ offset)
                 ]
                 [ Html.img
