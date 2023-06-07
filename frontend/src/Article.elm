@@ -3,6 +3,7 @@ module Article exposing (view)
 import Browser exposing (document)
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Json.Encode
 import Mark exposing (Outcome(..))
 import Mark.Error
 
@@ -16,7 +17,11 @@ view maybeSource =
         Just source ->
             case Mark.compile document source of
                 Mark.Success html ->
-                    Html.div [ Attr.class "w-full" ] html.body
+                    Html.div
+                        [ Attr.id "Article"
+                        , Attr.class "w-full"
+                        ]
+                        html.body
 
                 Mark.Almost { result, errors } ->
                     -- This is the case where there has been an error,
@@ -80,15 +85,7 @@ text =
         { view = viewText
         , replacements = Mark.commonReplacements
         , inlines =
-            [ Mark.verbatim "math"
-                (\str ->
-                    let
-                        mathText =
-                            String.concat [ "$", str, "$" ]
-                    in
-                    Html.span [] [ Html.text mathText ]
-                )
-            ]
+            [ Mark.verbatim "math" (mathText InlineMathMode) ]
         }
 
 
@@ -163,12 +160,23 @@ math : Mark.Block (Html msg)
 math =
     Mark.block "Math"
         (\str ->
-            let
-                padded =
-                    String.concat [ "$$", str, "$$" ]
-            in
             Html.div
                 [ Attr.class "px-4 text-xl col-start-2" ]
-                [ Html.text padded ]
+                [ mathText DisplayMathMode str ]
         )
         Mark.string
+
+
+type DisplayMode
+    = InlineMathMode
+    | DisplayMathMode
+
+
+mathText : DisplayMode -> String -> Html msg
+mathText displayMode content =
+    Html.node "math-text"
+        [ Attr.property "delay" (Json.Encode.bool False)
+        , Attr.property "display" (Json.Encode.bool (DisplayMathMode == displayMode))
+        , Attr.property "content" (Json.Encode.string (content |> String.replace "\\ \\" "\\\\"))
+        ]
+        []

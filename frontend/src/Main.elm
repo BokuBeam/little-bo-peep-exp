@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Article
 import Browser
@@ -7,6 +7,9 @@ import Html exposing (Html)
 import Html.Attributes as Attr
 import Http
 import Icon
+
+
+port onLoad : () -> Cmd msg
 
 
 main : Program () Model Msg
@@ -49,7 +52,7 @@ update msg model =
             case result of
                 Ok src ->
                     ( { model | article = Just src }
-                    , Cmd.none
+                    , onLoad ()
                     )
 
                 Err err ->
