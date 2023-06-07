@@ -156,10 +156,7 @@ MathJax = {
       //
       MathJax.startup.defaultReady();
 
-
       class MathText extends HTMLElement {
-
-
         connectedCallback() {
             const content_ =
               this.display
@@ -174,9 +171,7 @@ MathJax = {
             }
         }
       }
-
       customElements.define('math-text', MathText)
-
     }
   }
 };

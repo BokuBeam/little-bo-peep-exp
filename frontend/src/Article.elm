@@ -85,7 +85,9 @@ text =
         { view = viewText
         , replacements = Mark.commonReplacements
         , inlines =
-            [ Mark.verbatim "math" (mathText InlineMathMode) ]
+            [ Mark.verbatim "math" <|
+                \str -> Html.span [] [ mathText InlineMathMode str ]
+            ]
         }
 
 
@@ -174,9 +176,14 @@ type DisplayMode
 
 mathText : DisplayMode -> String -> Html msg
 mathText displayMode content =
+    let
+        inline =
+            InlineMathMode == displayMode
+    in
     Html.node "math-text"
-        [ Attr.property "delay" (Json.Encode.bool False)
-        , Attr.property "display" (Json.Encode.bool (DisplayMathMode == displayMode))
+        [ Attr.classList [ ( "inline-block", inline ) ]
+        , Attr.property "delay" (Json.Encode.bool False)
+        , Attr.property "display" (Json.Encode.bool <| not inline)
         , Attr.property "content" (Json.Encode.string (content |> String.replace "\\ \\" "\\\\"))
         ]
         []

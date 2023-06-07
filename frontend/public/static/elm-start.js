@@ -1,3 +1,4 @@
+// Prevent browser adjusting scroll position on refresh
 history.scrollRestoration = "manual"
 
 const root = document.getElementById("root");
