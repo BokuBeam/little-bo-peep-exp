@@ -3,10 +3,9 @@ port module Main exposing (main)
 import Article
 import Browser
 import Header
-import Html exposing (Html)
+import Html
 import Html.Attributes as Attr
 import Http
-import Icon
 
 
 port onLoad : () -> Cmd msg
@@ -55,7 +54,7 @@ update msg model =
                     , onLoad ()
                     )
 
-                Err err ->
+                Err _ ->
                     ( model, Cmd.none )
 
 
@@ -67,7 +66,8 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Little Bo Peep"
     , body =
-        [ Html.div
+        [ Html.node "math-text" [ Attr.class "hidden" ] []
+        , Html.div
             [ Attr.class "w-full" ]
             [ Header.view
             , Article.view model.article
