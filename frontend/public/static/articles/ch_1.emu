@@ -28,4 +28,16 @@ for every real number `x`{math}. Instead we have
 |> Math
     \sqrt{x^{2}} \rt{0.1} = \rt{0.1} |\rt{0.08}x\rt{0.08}|
 
+for every real number `x`{math}, where `|\rt{0.08}x\rt{0.08}|`{math} 
+denotes the absolute value of `x`{math}.
 
+(Nb: If ever you want to indicate both solutions of the
+equation `x^2 = 4`{math} you can always use the notation 
+"`\pm \sqrt{4}`{math}". 
+This is what happens, for example, in the 
+maybe-well-known formula
+
+|> Math
+    x = {-b \pm \sqrt{b^2 - 4ac} \over 2a}
+
+for the solutions to the quadratic equation `ax^2 + bx + c = 0`{math}.)

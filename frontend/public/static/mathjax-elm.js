@@ -61,10 +61,14 @@ MathJax = {
     }
   },
   options: {
-    skipHtmlTags: {'[+]': ['math-element']}
+    skipHtmlTags: {'[+]': ['math-element']},
+    enableMenu: false
   },
   loader: {
     load: ['[tex]/color']
+  },
+  output: {
+    font: 'mathjax-stix2'
   },
   startup: {
     ready: () => {
@@ -147,7 +151,7 @@ MathJax = {
         const InputJax = startup.getInputJax();
         const OutputJax = startup.getOutputJax();
         const html = mathjax.document(root, {InputJax, OutputJax});
-        html.render();
+        mathjax.handleRetriesFor(() => html.render());
         return html;
       }
 
@@ -165,10 +169,7 @@ MathJax = {
             this.attachShadow({mode: "open"});
             this.shadowRoot.innerHTML =
                 '<mjx-doc><mjx-head></mjx-head><mjx-body>' + content_ + '</mjx-body></mjx-doc>';
-                 MathJax.typesetShadow(this.shadowRoot)
-            if (this.delay) {
-              setTimeout(() => MathJax.typesetShadow(this.shadowRoot), 1);
-            }
+            MathJax.typesetShadow(this.shadowRoot);
         }
       }
       customElements.define('math-text', MathText)

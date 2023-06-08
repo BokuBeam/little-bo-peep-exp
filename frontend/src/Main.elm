@@ -66,8 +66,7 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "Little Bo Peep"
     , body =
-        [ Html.node "math-text" [ Attr.class "hidden" ] []
-        , Html.div
+        [ Html.div
             [ Attr.class "w-full" ]
             [ Header.view
             , Article.view model.article

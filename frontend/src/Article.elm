@@ -182,7 +182,6 @@ mathText displayMode content =
     in
     Html.node "math-text"
         [ Attr.classList [ ( "inline-block", inline ) ]
-        , Attr.property "delay" (Json.Encode.bool False)
         , Attr.property "display" (Json.Encode.bool <| not inline)
         , Attr.property "content" (Json.Encode.string (content |> String.replace "\\ \\" "\\\\"))
         ]
