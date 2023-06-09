@@ -68,7 +68,7 @@ MathJax = {
     load: ['[tex]/color']
   },
   output: {
-    font: 'mathjax-stix2'
+    font: 'mathjax-modern'
   },
   startup: {
     ready: () => {
