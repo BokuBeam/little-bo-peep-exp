@@ -11,7 +11,7 @@ are both positive. But `\sqrt{4}`{math} is, by definition, the unique /nonnegati
 |> Math
     \sqrt{(-2)^2} = 2
 
-|> Thought
+|> ThoughtMath
     img = images/svg_cloud_minus_two_squared.svg
     body = $(-2)^2 = 4,\,\, \sqrt{4} = 2$
     position = right

@@ -69,7 +69,7 @@ document =
         , body =
             Mark.manyOf
                 [ math
-                , thought
+                , thoughtMath
                 , Mark.map (Html.p [ Attr.class "text-xl col-start-2 px-4" ]) text
                 ]
         }
@@ -124,9 +124,9 @@ metadata =
         |> Mark.toBlock
 
 
-thought : Mark.Block (Html msg)
-thought =
-    Mark.record "Thought"
+thoughtMath : Mark.Block (Html msg)
+thoughtMath =
+    Mark.record "ThoughtMath"
         (\img body position offset childOffset ->
             Html.div
                 [ Attr.class <|
@@ -147,7 +147,8 @@ thought =
                     [ Attr.class "text-xl col-start-1 row-start-1"
                     , Attr.style "transform" ("translate" ++ childOffset)
                     ]
-                    [ Html.text body ]
+                    [ mathText InlineMathMode body
+                    ]
                 ]
         )
         |> Mark.field "img" Mark.string
