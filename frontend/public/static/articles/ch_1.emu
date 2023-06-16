@@ -1,65 +1,68 @@
 |> Article
     title = Chapter 1: A Few Refreshers
 
-*Square Roots.* You might remember that “minus times minus is plus” and that “plus times plus is plus”. (Why? The enemy of my enemy is my friend.) So any nonzero number multiplied by itself is positive. For example,
+|> Paragraph
+    *Square Roots.* You might remember that “minus times minus is plus” and that “plus times plus is plus”. (Why? The enemy of my enemy is my friend.) So any nonzero number multiplied by itself is positive. For example,
 
-|> Math
-    (-2) \times (-2) = 4\qquad\textrm{and}\qquad 2 \times 2 = 4
+    |> Math
+        (-2) \times (-2) = 4\qquad\textrm{and}\qquad 2 \times 2 = 4
 
-are both positive. But `\sqrt{4}`{math} is, by definition, the unique /nonnegative/ solution to `x^2 = 4`{math}. Hence, and whether you like it or not,
+    are both positive. But `\sqrt{4}`{math} is, by definition, the unique /nonnegative/ solution to `x^2 = 4`{math}. Hence, and whether you like it or not,
 
-|> Math
-    \sqrt{(-2)^2} = 2
+    |> Math
+        \sqrt{(-2)^2} = 2
 
-|> ThoughtMath
-    img = images/svg_cloud_minus_two_squared.svg
-    body = (-2)^2 = 4,\,\, \sqrt{4} = 2
-    position = right
-    offset = (-32px, -68px)
-    childOffset = (136px, 6px)
+    |> ThoughtMath
+        img = images/svg_cloud_minus_two_squared.svg
+        body = (-2)^2 = 4,\,\, \sqrt{4} = 2
+        position = right
+        offset = (-32px, -68px)
+        childOffset = (136px, 6px)
 
-and, in particular, it is /not/ true that
+    and, in particular, it is /not/ true that
 
-|> Math
-    \sqrt{x^{2}} \rt{0.1} = \rt{0.1} x
+    |> Math
+        \sqrt{x^{2}} \rt{0.1} = \rt{0.1} x
 
-for every real number `x`{math}. Instead we have
+    for every real number `x`{math}. Instead we have
 
-|> Math
-    \sqrt{x^{2}} \rt{0.1} = \rt{0.1} |\rt{0.08}x\rt{0.08}|
+    |> Math
+        \sqrt{x^{2}} \rt{0.1} = \rt{0.1} |\rt{0.08}x\rt{0.08}|
 
-for every real number `x`{math}, where `|\rt{0.08}x\rt{0.08}|`{math}  denotes the absolute value of `x`{math}.
+    for every real number `x`{math}, where `|\rt{0.08}x\rt{0.08}|`{math}  denotes the absolute value of `x`{math}.
 
-(Nb: If ever you want to indicate both solutions of the equation `x^2 = 4`{math} you can always use the notation  "`\pm \sqrt{4}`{math}".  This is what happens, for example, in the  maybe-well-known formula
+|> Paragraph
+    (Nb: If ever you want to indicate both solutions of the equation `x^2 = 4`{math} you can always use the notation  "`\pm \sqrt{4}`{math}".  This is what happens, for example, in the  maybe-well-known formula
 
-|> Math
-    x = {-b \pm \sqrt{b^2 - 4ac} \over 2a}
+    |> Math
+        x = {-b \pm \sqrt{b^2 - 4ac} \over 2a}
 
-for the solutions to the quadratic equation `ax^2 + bx + c = 0`{math}.)
+    for the solutions to the quadratic equation `ax^2 + bx + c = 0`{math}.)
+    
+|> Paragraph
+    Now we can ponder, say,
 
-Now we can ponder, say,
+    |> Math
+        \sqrt{0.5}
 
-|> Math
-    \sqrt{0.5}
+    whose value is---by definition---the unique nonnegative solution to
 
-whose value is---by definition---the unique nonnegative solution to
+    |> Math
+        x^2 = 0.5.
 
-|> Math
-    x^2 = 0.5.
+    As beginners, there's nothing wrong with trying to solve this equation by trial and error. With `x = \frac{1}{4}`{math}, for example, we find
 
-As beginners, there's nothing wrong with trying to solve this equation by trial and error. With `x = \frac{1}{4}`{math}, for example, we find
+    |> Math
+        x^2 = \frac{1}{4}\times\frac{1}{4} = \frac{1}{16}
 
-|> Math
-    x^2 = \frac{1}{4}\times\frac{1}{4} = \frac{1}{16}
+    so `x = \frac{1}{4}`{math} is not a solution of the equation, being  apparently too small. Increasing `x`{math} to `x = \frac{1}{2}`{math}, say, we find
 
-so `x = \frac{1}{4}`{math} is not a solution of the equation, being  apparently too small. Increasing `x`{math} to `x = \frac{1}{2}`{math}, say, we find
+    |> Math
+        x^2 = \frac{1}{2}\times\frac{1}{2} = \frac{1}{4}
 
-|> Math
-    x^2 = \frac{1}{2}\times\frac{1}{2} = \frac{1}{4}
+    which is better, since `1/4`{math} is closer to `1/2`{math}, but still too small. Increasing `x`{math} by `1/4`{math} again, say, to `x = \frac{3}{4}`{math}, we find
 
-which is better, since `1/4`{math} is closer to `1/2`{math}, but still too small. Increasing `x`{math} by `1/4`{math} again, say, to `x = \frac{3}{4}`{math}, we find
+    |> Math
+        x^2 = \frac{3}{4}\times\frac{3}{4} = \frac{9}{16}
 
-|> Math
-    x^2 = \frac{3}{4}\times\frac{3}{4} = \frac{9}{16}
-
-which---surprise!---is actually pretty close to `1/2`{math}, as  `1/2 = 8/16`{math}. and since `9/16 > 0.5`{math}, `\sqrt{0.5}`{math} must be a little /less/ than `\frac{3}{4} = 0.75`{math}.
+    which---surprise!---is actually pretty close to `1/2`{math}, as  `1/2 = 8/16`{math}. and since `9/16 > 0.5`{math}, `\sqrt{0.5}`{math} must be a little /less/ than `\frac{3}{4} = 0.75`{math}.

@@ -70,13 +70,20 @@ document =
             }
         )
         { metadata = metadata
-        , body =
-            Mark.manyOf
-                [ math
-                , thoughtMath
-                , Mark.map (Html.p [ Attr.class "indent-1 text-xl px-4" ]) text
-                ]
+        , body = Mark.manyOf [ paragraph ]
         }
+
+
+paragraph : Mark.Block (Html msg)
+paragraph =
+    Mark.block "Paragraph"
+        (Html.p [ Attr.class "indent-8 text-xl px-4" ])
+        (Mark.manyOf
+            [ math
+            , thoughtMath
+            , Mark.map (Html.span []) text
+            ]
+        )
 
 
 
@@ -90,7 +97,7 @@ text =
         , replacements = Mark.commonReplacements
         , inlines =
             [ Mark.verbatim "math" <|
-                \str -> Html.span [] [ mathText InlineMathMode str ]
+                \str -> mathText InlineMathMode str
             ]
         }
 
@@ -109,12 +116,13 @@ viewText styles string =
                 [ ( "font-baskerville-bold", styles.bold )
                 , ( "font-baskerville-italic", styles.italic )
                 ]
+            , Attr.class "indent-0"
             ]
             [ Html.text string
             ]
 
     else
-        Html.span [] [ Html.text string ]
+        Html.text string
 
 
 metadata : Mark.Block { title : List (Html msg) }
@@ -133,7 +141,8 @@ thoughtMath =
     Mark.record "ThoughtMath"
         (\img body position offset childOffset ->
             Html.div
-                [ Attr.style "transform" ("translate" ++ offset)
+                [ Attr.class "hidden"
+                , Attr.style "transform" ("translate" ++ offset)
                 ]
                 [ Html.img
                     [ Attr.src img
@@ -160,7 +169,7 @@ math =
     Mark.block "Math"
         (\str ->
             Html.div
-                [ Attr.class "px-4 text-xl" ]
+                [ Attr.class "indent-0 text-xl" ]
                 [ mathText DisplayMathMode str ]
         )
         Mark.string
@@ -179,6 +188,7 @@ mathText displayMode content =
     in
     Html.node "math-text"
         [ Attr.classList [ ( "inline-block", inline ) ]
+        , Attr.class "indent-0"
         , Attr.property "display" (Json.Encode.bool <| not inline)
         , Attr.property "content" (Json.Encode.string (content |> String.replace "\\ \\" "\\\\"))
         ]
