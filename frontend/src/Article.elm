@@ -20,8 +20,13 @@ view maybeSource =
                     Html.div
                         [ Attr.id "Article"
                         , Attr.class "w-full"
+                        , Attr.class "flex justify-center align-center"
                         ]
-                        html.body
+                        [ Html.div
+                            [ Attr.class "w-full sm:w-128"
+                            ]
+                            html.body
+                        ]
 
                 Mark.Almost { result, errors } ->
                     -- This is the case where there has been an error,
@@ -56,10 +61,9 @@ document =
             , body =
                 [ Html.div
                     [ Attr.class "font-baskerville"
-                    , Attr.class "grid gap-0 items-center grid-cols-3"
-                    , Attr.class "w-3/1 md:w-300"
+                    , Attr.class "flex flex-col"
                     ]
-                    (Html.h1 [ Attr.class "text-4xl py-8 col-start-2 px-4" ] meta.title
+                    (Html.h1 [ Attr.class "text-4xl py-8 px-4" ] meta.title
                         :: body
                     )
                 ]
@@ -70,7 +74,7 @@ document =
             Mark.manyOf
                 [ math
                 , thoughtMath
-                , Mark.map (Html.p [ Attr.class "text-xl col-start-2 px-4" ]) text
+                , Mark.map (Html.p [ Attr.class "indent-1 text-xl px-4" ]) text
                 ]
         }
 
@@ -129,22 +133,14 @@ thoughtMath =
     Mark.record "ThoughtMath"
         (\img body position offset childOffset ->
             Html.div
-                [ Attr.class <|
-                    if position == "left" then
-                        "col-start-1"
-
-                    else
-                        "col-start-3"
-                , Attr.class "grid items-center h-0"
-                , Attr.style "transform" ("translate" ++ offset)
+                [ Attr.style "transform" ("translate" ++ offset)
                 ]
                 [ Html.img
                     [ Attr.src img
-                    , Attr.class "col-start-1 row-start-1"
                     ]
                     []
                 , Html.span
-                    [ Attr.class "text-xl col-start-1 row-start-1"
+                    [ Attr.class "text-xl"
                     , Attr.style "transform" ("translate" ++ childOffset)
                     ]
                     [ mathText InlineMathMode body
@@ -164,7 +160,7 @@ math =
     Mark.block "Math"
         (\str ->
             Html.div
-                [ Attr.class "px-4 text-xl col-start-2" ]
+                [ Attr.class "px-4 text-xl" ]
                 [ mathText DisplayMathMode str ]
         )
         Mark.string
