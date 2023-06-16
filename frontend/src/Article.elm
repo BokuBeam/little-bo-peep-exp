@@ -70,14 +70,26 @@ document =
             }
         )
         { metadata = metadata
-        , body = Mark.manyOf [ paragraph ]
+        , body = Mark.manyOf [ paragraph, paragraphFlat ]
         }
 
 
 paragraph : Mark.Block (Html msg)
 paragraph =
     Mark.block "Paragraph"
-        (Html.p [ Attr.class "indent-8 text-xl px-4" ])
+        (Html.p [ Attr.class "indent-10 text-xl px-4" ])
+        (Mark.manyOf
+            [ math
+            , thoughtMath
+            , Mark.map (Html.span []) text
+            ]
+        )
+
+
+paragraphFlat : Mark.Block (Html msg)
+paragraphFlat =
+    Mark.block "ParagraphFlat"
+        (Html.p [ Attr.class "indent-0 text-xl px-4" ])
         (Mark.manyOf
             [ math
             , thoughtMath
