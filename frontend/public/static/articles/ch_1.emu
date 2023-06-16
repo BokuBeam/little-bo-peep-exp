@@ -15,9 +15,8 @@
     |> ThoughtMath
         img = images/svg_cloud_minus_two_squared.svg
         body = (-2)^2 = 4,\,\, \sqrt{4} = 2
-        position = right
-        offset = (27rem, -8rem)
-        childOffset = (17.4rem, 3.1rem)
+        offset = (0, 2rem)
+        childOffset = (8.2rem, 3.1rem)
 
     and, in particular, it is /not/ true that
 

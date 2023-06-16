@@ -3,6 +3,7 @@ module Article exposing (view)
 import Browser exposing (document)
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Icon
 import Json.Encode
 import Mark exposing (Outcome(..))
 import Mark.Error
@@ -19,7 +20,7 @@ view maybeSource =
                 Mark.Success html ->
                     Html.div
                         [ Attr.id "Article"
-                        , Attr.class "w-full"
+                        , Attr.class "w-full overflow-hidden"
                         , Attr.class "flex justify-center align-center"
                         ]
                         [ Html.div
@@ -77,7 +78,7 @@ document =
 paragraph : Mark.Block (Html msg)
 paragraph =
     Mark.block "Paragraph"
-        (Html.p [ Attr.class "indent-10 text-xl px-4" ])
+        (Html.p [ Attr.class "relative indent-10 text-xl px-4" ])
         (Mark.manyOf
             [ math
             , thoughtMath
@@ -89,7 +90,7 @@ paragraph =
 paragraphFlat : Mark.Block (Html msg)
 paragraphFlat =
     Mark.block "ParagraphFlat"
-        (Html.p [ Attr.class "indent-0 text-xl px-4" ])
+        (Html.p [ Attr.class "relative indent-0 text-xl px-4" ])
         (Mark.manyOf
             [ math
             , thoughtMath
@@ -151,26 +152,27 @@ metadata =
 thoughtMath : Mark.Block (Html msg)
 thoughtMath =
     Mark.record "ThoughtMath"
-        (\img body position offset childOffset ->
-            Html.div
-                [ Attr.class "hidden lg:flex absolute right-1/2 top-1/2"
-                , Attr.style "transform" ("translate" ++ offset)
-                ]
-                [ Html.span
-                    [ Attr.class "text-xl"
-                    , Attr.style "transform" ("translate" ++ childOffset)
+        (\img body offset childOffset ->
+            Html.div [ Attr.class "relative top-[-1rem]" ]
+                [ Html.div
+                    [ Attr.class "lg:hidden absolute bottom-0 right-0"
                     ]
-                    [ mathText InlineMathMode body
+                    [ Icon.arrowUp ]
+                , Html.div
+                    [ Attr.class "opacity-0 lg:opacity-100 block absolute bottom-0 right-[-50%] pointer-events-none"
+                    , Attr.style "transform" ("translate" ++ offset)
                     ]
-                , Html.img
-                    [ Attr.src img
+                    [ Html.span
+                        [ Attr.class "text-xl absolute"
+                        , Attr.style "transform" ("translate" ++ childOffset)
+                        ]
+                        [ mathText InlineMathMode body ]
+                    , Html.img [ Attr.src img ] []
                     ]
-                    []
                 ]
         )
         |> Mark.field "img" Mark.string
         |> Mark.field "body" Mark.string
-        |> Mark.field "position" Mark.string
         |> Mark.field "offset" Mark.string
         |> Mark.field "childOffset" Mark.string
         |> Mark.toBlock
