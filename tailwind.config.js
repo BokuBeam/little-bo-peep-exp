@@ -19,7 +19,7 @@ module.exports = {
         'tomorrow': ['Tomorrow']
       },
       width: {
-        '128': '32rem',
+        '128': '32.5rem',
         '192': '48rem',
         '256': '64rem',
         '300': '100rem',

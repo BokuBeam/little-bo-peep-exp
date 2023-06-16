@@ -153,19 +153,19 @@ thoughtMath =
     Mark.record "ThoughtMath"
         (\img body position offset childOffset ->
             Html.div
-                [ Attr.class "hidden"
+                [ Attr.class "hidden lg:flex absolute right-1/2 top-1/2"
                 , Attr.style "transform" ("translate" ++ offset)
                 ]
-                [ Html.img
-                    [ Attr.src img
-                    ]
-                    []
-                , Html.span
+                [ Html.span
                     [ Attr.class "text-xl"
                     , Attr.style "transform" ("translate" ++ childOffset)
                     ]
                     [ mathText InlineMathMode body
                     ]
+                , Html.img
+                    [ Attr.src img
+                    ]
+                    []
                 ]
         )
         |> Mark.field "img" Mark.string
@@ -181,7 +181,7 @@ math =
     Mark.block "Math"
         (\str ->
             Html.div
-                [ Attr.class "indent-0 text-xl" ]
+                [ Attr.class "indent-0 text-xl min-h-[4rem] flex items-center justify-center" ]
                 [ mathText DisplayMathMode str ]
         )
         Mark.string

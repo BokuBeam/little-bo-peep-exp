@@ -16,8 +16,8 @@
         img = images/svg_cloud_minus_two_squared.svg
         body = (-2)^2 = 4,\,\, \sqrt{4} = 2
         position = right
-        offset = (-32px, -68px)
-        childOffset = (136px, 6px)
+        offset = (27rem, -8rem)
+        childOffset = (17.4rem, 3.1rem)
 
     and, in particular, it is /not/ true that
 
