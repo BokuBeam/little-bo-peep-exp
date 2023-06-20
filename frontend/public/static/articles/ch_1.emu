@@ -36,7 +36,7 @@
     |> Math
         x = {-b \pm \sqrt{b^2 - 4ac} \over 2a}
 
-    for the solutions to the quadratic equation `ax^2 + bx + c = 0`{math}.)
+    for the solutions to the quadratic equation `ax^2 + bx + c = 0{.)}`{math}
     
 |> Paragraph
     Now we can ponder, say,
