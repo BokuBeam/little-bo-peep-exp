@@ -14,7 +14,7 @@ view =
         ]
         [ Html.div
             [ Attr.class "flex justify-center content-center"
-            , Attr.class "w-full sm:w-128 pl-4"
+            , Attr.class "w-full md:w-192 lg:w-128 pl-4"
             , Attr.id "Header"
             ]
             [ Html.div
