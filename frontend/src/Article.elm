@@ -24,7 +24,7 @@ view maybeSource =
                         , Attr.class "flex justify-center align-center"
                         ]
                         [ Html.div
-                            [ Attr.class "w-full sm:w-128"
+                            [ Attr.class "w-full md:w-192"
                             ]
                             html.body
                         ]
@@ -78,7 +78,7 @@ document =
 paragraph : Mark.Block (Html msg)
 paragraph =
     Mark.block "Paragraph"
-        (Html.p [ Attr.class "relative indent-10 text-xl px-4" ])
+        (Html.p [ Attr.class "relative indent-10 text-xl px-4 sm:leading-relaxed" ])
         (Mark.manyOf
             [ math
             , thoughtMath
@@ -90,7 +90,7 @@ paragraph =
 paragraphFlat : Mark.Block (Html msg)
 paragraphFlat =
     Mark.block "ParagraphFlat"
-        (Html.p [ Attr.class "relative indent-0 text-xl px-4" ])
+        (Html.p [ Attr.class "relative indent-0 text-xl px-4 sm:leading-relaxed" ])
         (Mark.manyOf
             [ math
             , thoughtMath
