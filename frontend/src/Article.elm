@@ -3,46 +3,53 @@ module Article exposing (view)
 import Browser exposing (document)
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Html.Events exposing (onClick)
 import Icon
 import Json.Encode
 import Mark exposing (Outcome(..))
 import Mark.Error
+import Msg exposing (Msg(..))
 
 
-view : Maybe String -> Html msg
-view maybeSource =
-    case maybeSource of
-        Nothing ->
-            Html.div [] []
+type alias ArticleData =
+    { article : String
+    , thoughtShowing : Bool
+    }
 
-        Just source ->
-            case Mark.compile document source of
-                Mark.Success html ->
-                    Html.div
-                        [ Attr.id "Article"
-                        , Attr.class "w-full overflow-hidden"
-                        , Attr.class "flex justify-center align-center"
+
+view : ArticleData -> Html Msg
+view data =
+    case Mark.compile (document data.thoughtShowing) data.article of
+        Mark.Success html ->
+            Html.div
+                [ Attr.id "Article"
+                , Attr.class "w-full overflow-hidden"
+                , Attr.class "flex justify-center align-center"
+                ]
+                [ Html.div
+                    [ Attr.class "w-full md:w-192 lg:w-128 transition"
+                    , Attr.classList
+                        [ ( "-translate-x-2/3", data.thoughtShowing )
+                        , ( "bg-slate-100", data.thoughtShowing )
                         ]
-                        [ Html.div
-                            [ Attr.class "w-full md:w-192 lg:w-128"
-                            ]
-                            html.body
-                        ]
+                    ]
+                    html.body
+                ]
 
-                Mark.Almost { result, errors } ->
-                    -- This is the case where there has been an error,
-                    -- but it has been caught by `Mark.onError` and is still rendereable.
-                    Html.div []
-                        [ Html.div [] (viewErrors errors)
-                        , Html.div [] result.body
-                        ]
+        Mark.Almost { result, errors } ->
+            -- This is the case where there has been an error,
+            -- but it has been caught by `Mark.onError` and is still rendereable.
+            Html.div []
+                [ Html.div [] (viewErrors errors)
+                , Html.div [] result.body
+                ]
 
-                Mark.Failure errors ->
-                    Html.div []
-                        (viewErrors errors)
+        Mark.Failure errors ->
+            Html.div []
+                (viewErrors errors)
 
 
-viewErrors : List Mark.Error.Error -> List (Html msg)
+viewErrors : List Mark.Error.Error -> List (Html Msg)
 viewErrors errors =
     List.map
         (Mark.Error.toHtml Mark.Error.Light)
@@ -50,12 +57,14 @@ viewErrors errors =
 
 
 document :
-    Mark.Document
-        { metadata :
-            { title : List (Html msg) }
-        , body : List (Html msg)
-        }
-document =
+    Bool
+    ->
+        Mark.Document
+            { metadata :
+                { title : List (Html Msg) }
+            , body : List (Html Msg)
+            }
+document thoughtShowing =
     Mark.documentWith
         (\meta body ->
             { metadata = meta
@@ -71,29 +80,33 @@ document =
             }
         )
         { metadata = metadata
-        , body = Mark.manyOf [ paragraph, paragraphFlat ]
+        , body =
+            Mark.manyOf
+                [ paragraph thoughtShowing
+                , paragraphFlat thoughtShowing
+                ]
         }
 
 
-paragraph : Mark.Block (Html msg)
-paragraph =
+paragraph : Bool -> Mark.Block (Html Msg)
+paragraph thoughtShowing =
     Mark.block "Paragraph"
         (Html.p [ Attr.class "relative indent-10 text-xl px-4 sm:leading-relaxed" ])
         (Mark.manyOf
             [ math
-            , thoughtMath
+            , thoughtMath thoughtShowing
             , Mark.map (Html.span []) text
             ]
         )
 
 
-paragraphFlat : Mark.Block (Html msg)
-paragraphFlat =
+paragraphFlat : Bool -> Mark.Block (Html Msg)
+paragraphFlat thoughtShowing =
     Mark.block "ParagraphFlat"
         (Html.p [ Attr.class "relative indent-0 text-xl px-4 sm:leading-relaxed" ])
         (Mark.manyOf
             [ math
-            , thoughtMath
+            , thoughtMath thoughtShowing
             , Mark.map (Html.span []) text
             ]
         )
@@ -103,7 +116,7 @@ paragraphFlat =
 {- Handle Text -}
 
 
-text : Mark.Block (List (Html msg))
+text : Mark.Block (List (Html Msg))
 text =
     Mark.textWith
         { view = viewText
@@ -121,7 +134,7 @@ viewText :
         , italic : Bool
     }
     -> String
-    -> Html msg
+    -> Html Msg
 viewText styles string =
     if styles.bold || styles.italic then
         Html.span
@@ -138,7 +151,7 @@ viewText styles string =
         Html.text string
 
 
-metadata : Mark.Block { title : List (Html msg) }
+metadata : Mark.Block { title : List (Html Msg) }
 metadata =
     Mark.record "Article"
         (\title ->
@@ -149,17 +162,31 @@ metadata =
         |> Mark.toBlock
 
 
-thoughtMath : Mark.Block (Html msg)
-thoughtMath =
+thoughtMath : Bool -> Mark.Block (Html Msg)
+thoughtMath thoughtShowing =
     Mark.record "ThoughtMath"
         (\img body offset childOffset ->
             Html.div [ Attr.class "relative top-[-1rem]" ]
-                [ Html.div
+                [ Html.button
                     [ Attr.class "lg:hidden absolute bottom-0 right-0"
+                    , Attr.classList [ ( "hidden", thoughtShowing ) ]
+                    , onClick ShowThought
                     ]
                     [ Icon.arrowUp ]
                 , Html.div
                     [ Attr.class "opacity-0 lg:opacity-100 block absolute bottom-0 right-[-50%] pointer-events-none"
+                    , Attr.style "transform" ("translate" ++ offset)
+                    ]
+                    [ Html.span
+                        [ Attr.class "text-xl absolute"
+                        , Attr.style "transform" ("translate" ++ childOffset)
+                        ]
+                        [ mathText InlineMathMode body ]
+                    , Html.img [ Attr.src img ] []
+                    ]
+                , Html.div
+                    [ Attr.classList [ ( "hidden", not thoughtShowing ) ]
+                    , Attr.class "block absolute bottom-0 right-[-50%] pointer-events-none"
                     , Attr.style "transform" ("translate" ++ offset)
                     ]
                     [ Html.span
@@ -178,7 +205,7 @@ thoughtMath =
         |> Mark.toBlock
 
 
-math : Mark.Block (Html msg)
+math : Mark.Block (Html Msg)
 math =
     Mark.block "Math"
         (\str ->
@@ -194,7 +221,7 @@ type DisplayMode
     | DisplayMathMode
 
 
-mathText : DisplayMode -> String -> Html msg
+mathText : DisplayMode -> String -> Html Msg
 mathText displayMode content =
     let
         inline =

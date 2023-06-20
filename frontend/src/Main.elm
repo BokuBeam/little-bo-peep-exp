@@ -6,6 +6,7 @@ import Header
 import Html
 import Html.Attributes as Attr
 import Http
+import Msg exposing (Msg(..))
 
 
 port onLoad : () -> Cmd msg
@@ -23,12 +24,15 @@ main =
 
 type alias Model =
     { article : Maybe String
+    , thoughtShowing : Bool
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( { article = Nothing }
+    ( { article = Nothing
+      , thoughtShowing = False
+      }
     , Http.get
         { url = "/articles/ch_1.emu"
         , expect = Http.expectString GotArticle
@@ -38,10 +42,6 @@ init () =
 
 
 -- UPDATE
-
-
-type Msg
-    = GotArticle (Result Http.Error String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -57,6 +57,9 @@ update msg model =
                 Err _ ->
                     ( model, Cmd.none )
 
+        ShowThought ->
+            ( { model | thoughtShowing = True }, Cmd.none )
+
 
 
 -- VIEW
@@ -69,7 +72,15 @@ view model =
         [ Html.div
             [ Attr.class "w-full" ]
             [ Header.view
-            , Article.view model.article
+            , case model.article of
+                Just article ->
+                    Article.view
+                        { article = article
+                        , thoughtShowing = model.thoughtShowing
+                        }
+
+                Nothing ->
+                    Html.span [] []
             ]
         ]
     }
