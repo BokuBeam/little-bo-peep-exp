@@ -9,6 +9,7 @@ view : Html msg
 view =
     Html.div
         [ Attr.class "flex justify-center"
+        , Attr.class "fixed w-full bg-white z-50"
         , Attr.class "border-b-2 border-t-10"
         , Attr.class "py-4"
         ]

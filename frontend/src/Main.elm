@@ -3,8 +3,9 @@ port module Main exposing (main)
 import Article
 import Browser
 import Header
-import Html
+import Html exposing (Html)
 import Html.Attributes as Attr
+import Html.Events exposing (onClick)
 import Http
 import Msg exposing (Msg(..))
 
@@ -60,6 +61,9 @@ update msg model =
         ShowThought ->
             ( { model | thoughtShowing = True }, Cmd.none )
 
+        HideThought ->
+            ( { model | thoughtShowing = False }, Cmd.none )
+
 
 
 -- VIEW
@@ -84,3 +88,16 @@ view model =
             ]
         ]
     }
+
+
+modalButton : Bool -> Html Msg
+modalButton thoughtShowing =
+    Html.div
+        [ Attr.class "opacity-0 z-50 bg-blue-500/50 hover:bg-blue-300/50 transition fixed w-full h-full"
+        , Attr.classList
+            [ ( "hidden", not thoughtShowing )
+            , ( "opacity-100", thoughtShowing )
+            ]
+        , onClick HideThought
+        ]
+        [ Html.img [ Attr.src "images/arrow_left.svg" ] [] ]

@@ -29,11 +29,11 @@ view data =
                 [ Html.div
                     [ Attr.class "w-full md:w-192 lg:w-128 transition"
                     , Attr.classList
-                        [ ( "-translate-x-2/3", data.thoughtShowing )
-                        , ( "bg-slate-100", data.thoughtShowing )
+                        [ ( "-translate-x-3/4", data.thoughtShowing )
                         ]
                     ]
                     html.body
+                , modalButton data.thoughtShowing
                 ]
 
         Mark.Almost { result, errors } ->
@@ -47,6 +47,21 @@ view data =
         Mark.Failure errors ->
             Html.div []
                 (viewErrors errors)
+
+
+modalButton : Bool -> Html Msg
+modalButton thoughtShowing =
+    Html.button
+        [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50 transition duration-300"
+        , Attr.class "lg:hidden fixed w-1/4 h-full left-0"
+        , Attr.class "flex flex-col items-center justify-center"
+        , Attr.classList
+            [ ( "opacity-0 pointer-events-none", not thoughtShowing )
+            , ( "opacity-100", thoughtShowing )
+            ]
+        , onClick HideThought
+        ]
+        [ Icon.sideArrowLeft ]
 
 
 viewErrors : List Mark.Error.Error -> List (Html Msg)
@@ -73,7 +88,7 @@ document thoughtShowing =
                     [ Attr.class "font-baskerville"
                     , Attr.class "flex flex-col"
                     ]
-                    (Html.h1 [ Attr.class "text-4xl py-8 px-4" ] meta.title
+                    (Html.h1 [ Attr.class "mt-16 text-4xl py-8 px-4" ] meta.title
                         :: body
                     )
                 ]
@@ -169,7 +184,11 @@ thoughtMath thoughtShowing =
             Html.div [ Attr.class "relative top-[-1rem]" ]
                 [ Html.button
                     [ Attr.class "lg:hidden absolute bottom-0 right-0"
-                    , Attr.classList [ ( "hidden", thoughtShowing ) ]
+                    , Attr.class "transition-opacity duration-300"
+                    , Attr.classList
+                        [ ( "opacity-0", thoughtShowing )
+                        , ( "opacity-100", not thoughtShowing )
+                        ]
                     , onClick ShowThought
                     ]
                     [ Icon.arrowUp ]
@@ -185,7 +204,11 @@ thoughtMath thoughtShowing =
                     , Html.img [ Attr.src img ] []
                     ]
                 , Html.div
-                    [ Attr.classList [ ( "hidden", not thoughtShowing ) ]
+                    [ Attr.classList
+                        [ ( "opacity-0", not thoughtShowing )
+                        , ( "opacity-100", thoughtShowing )
+                        ]
+                    , Attr.class "lg:hidden transition-opacity duration-300"
                     , Attr.class "block absolute bottom-0 right-[-50%] pointer-events-none"
                     , Attr.style "transform" ("translate" ++ offset)
                     ]
