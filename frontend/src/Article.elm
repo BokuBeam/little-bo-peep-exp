@@ -24,7 +24,7 @@ view maybeSource =
                         , Attr.class "flex justify-center align-center"
                         ]
                         [ Html.div
-                            [ Attr.class "w-full md:w-192"
+                            [ Attr.class "w-full md:w-192 lg:w-128"
                             ]
                             html.body
                         ]
