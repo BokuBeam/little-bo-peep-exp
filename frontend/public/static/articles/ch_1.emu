@@ -28,7 +28,7 @@
     |> Math
         \sqrt{x^{2}} \rt{0.1} = \rt{0.1} |\rt{0.08}x\rt{0.08}|
 
-    for every real number `x`{math}, where `|\rt{0.08}x\rt{0.08}|`{math}  denotes the absolute value of `x`{math}.
+    for every real number `x`{math}, where `|{0.08}x{0.08}|`{math}  denotes the absolute value of `x`{math}.
 
 |> Paragraph
     (Nb: If ever you want to indicate both solutions of the equation `x^2 = 4`{math} you can always use the notation  "`\pm \sqrt{4}`{math}".  This is what happens, for example, in the  maybe-well-known formula
