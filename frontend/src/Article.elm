@@ -88,7 +88,7 @@ document thoughtShowing =
                     [ Attr.class "font-baskerville"
                     , Attr.class "flex flex-col"
                     ]
-                    (Html.h1 [ Attr.class "mt-16 text-4xl py-8 px-4" ] meta.title
+                    (Html.h1 [ Attr.class "mt-14 text-4xl p-4" ] meta.title
                         :: body
                     )
                 ]

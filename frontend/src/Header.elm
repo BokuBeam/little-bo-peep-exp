@@ -8,10 +8,10 @@ import Icon
 view : Html msg
 view =
     Html.div
-        [ Attr.class "flex justify-center"
+        [ Attr.class "flex justify-center items-center"
         , Attr.class "fixed w-full bg-white z-50"
         , Attr.class "border-b-2 border-t-10"
-        , Attr.class "py-4"
+        , Attr.class "h-14"
         ]
         [ Html.div
             [ Attr.class "flex justify-center content-center"
@@ -20,7 +20,7 @@ view =
             ]
             [ Html.div
                 [ Attr.class "font-clickerscript text-3xl"
-                , Attr.class "flex-auto"
+                , Attr.class "flex-auto self-end"
                 ]
                 [ Html.text "Little Bo Peep" ]
             , Html.div
