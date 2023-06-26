@@ -23,8 +23,5 @@ view =
                 , Attr.class "flex-auto self-end"
                 ]
                 [ Html.text "Little Bo Peep" ]
-            , Html.div
-                []
-                [ Icon.arrowUp ]
             ]
         ]
