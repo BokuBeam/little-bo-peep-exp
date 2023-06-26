@@ -23,13 +23,15 @@ view data =
         Mark.Success html ->
             Html.div
                 [ Attr.id "Article"
-                , Attr.class "w-full overflow-hidden"
+                , Attr.class "w-full"
                 , Attr.class "flex justify-center align-center"
                 ]
                 [ Html.div
                     [ Attr.class "w-full md:w-192 lg:w-128 transition"
+                    , Attr.class "lg:overflow-visible lg:translate-x-0"
                     , Attr.classList
                         [ ( "-translate-x-3/4", data.thoughtShowing )
+                        , ( "overflow-hidden", not data.thoughtShowing )
                         ]
                     ]
                     html.body
@@ -179,53 +181,67 @@ metadata =
 
 thoughtMath : Bool -> Mark.Block (Html Msg)
 thoughtMath thoughtShowing =
-    Mark.record "ThoughtMath"
-        (\img body offset childOffset ->
-            Html.div [ Attr.class "relative top-[-1rem]" ]
-                [ Html.button
-                    [ Attr.class "lg:hidden absolute bottom-0 right-0"
-                    , Attr.class "transition-opacity duration-300"
-                    , Attr.classList
-                        [ ( "opacity-0", thoughtShowing )
-                        , ( "opacity-100", not thoughtShowing )
-                        ]
-                    , onClick ShowThought
-                    ]
-                    [ Icon.arrowUp ]
-                , Html.div
-                    [ Attr.class "opacity-0 lg:opacity-100 block absolute bottom-0 right-[-50%] pointer-events-none"
-                    , Attr.style "transform" ("translate" ++ offset)
-                    ]
-                    [ Html.span
-                        [ Attr.class "text-xl absolute"
-                        , Attr.style "transform" ("translate" ++ childOffset)
-                        ]
-                        [ mathText InlineMathMode body ]
-                    , Html.img [ Attr.src img ] []
-                    ]
-                , Html.div
-                    [ Attr.classList
-                        [ ( "opacity-0", not thoughtShowing )
-                        , ( "opacity-100", thoughtShowing )
-                        ]
-                    , Attr.class "lg:hidden transition-opacity duration-300"
-                    , Attr.class "block absolute bottom-0 right-[-50%] pointer-events-none"
-                    , Attr.style "transform" ("translate" ++ offset)
-                    ]
-                    [ Html.span
-                        [ Attr.class "text-xl absolute"
-                        , Attr.style "transform" ("translate" ++ childOffset)
-                        ]
-                        [ mathText InlineMathMode body ]
-                    , Html.img [ Attr.src img ] []
-                    ]
-                ]
-        )
+    Mark.record "ThoughtMath" (viewThoughtMath thoughtShowing)
         |> Mark.field "img" Mark.string
         |> Mark.field "body" Mark.string
         |> Mark.field "offset" Mark.string
         |> Mark.field "childOffset" Mark.string
         |> Mark.toBlock
+
+
+viewThoughtMath : Bool -> String -> String -> String -> String -> Html Msg
+viewThoughtMath thoughtShowing img body offset childOffset =
+    let
+        thoughtButton =
+            Html.button
+                [ Attr.class "lg:hidden absolute bottom-0 right-0"
+                , Attr.class "transition-opacity duration-300"
+                , Attr.classList
+                    [ ( "opacity-0", thoughtShowing )
+                    , ( "opacity-100", not thoughtShowing )
+                    ]
+                , onClick ShowThought
+                ]
+                [ Icon.arrowUp ]
+
+        largeThought =
+            Html.div
+                [ Attr.class "opacity-0 lg:opacity-100 pointer-events-none"
+                , Attr.class "block absolute bottom-0 right-24"
+                , Attr.style "transform" ("translate" ++ offset)
+                ]
+                [ Html.span
+                    [ Attr.class "text-xl absolute"
+                    , Attr.style "transform" ("translate" ++ childOffset)
+                    ]
+                    [ mathText InlineMathMode body ]
+                , Html.img [ Attr.src img ] []
+                ]
+
+        smallThought =
+            Html.div
+                [ Attr.classList
+                    [ ( "opacity-0", not thoughtShowing )
+                    , ( "opacity-100", thoughtShowing )
+                    ]
+                , Attr.class "transition-opacity duration-300 pointer-events-none"
+                , Attr.class "lg:transition-none lg:opacity-0"
+                , Attr.class "block absolute bottom-0 right-0"
+                , Attr.style "transform" ("translate" ++ offset)
+                ]
+                [ Html.span
+                    [ Attr.class "text-xl absolute"
+                    , Attr.style "transform" ("translate" ++ childOffset)
+                    ]
+                    [ mathText InlineMathMode body ]
+                , Html.img [ Attr.src img ] []
+                ]
+    in
+    Html.div [ Attr.class "relative top-[-1rem]" ]
+        [ thoughtButton
+        , largeThought
+        , smallThought
+        ]
 
 
 math : Mark.Block (Html Msg)
