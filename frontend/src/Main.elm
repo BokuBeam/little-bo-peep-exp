@@ -88,16 +88,3 @@ view model =
             ]
         ]
     }
-
-
-modalButton : Bool -> Html Msg
-modalButton thoughtShowing =
-    Html.div
-        [ Attr.class "opacity-0 z-50 bg-blue-500/50 hover:bg-blue-300/50 transition fixed w-full h-full"
-        , Attr.classList
-            [ ( "hidden", not thoughtShowing )
-            , ( "opacity-100", thoughtShowing )
-            ]
-        , onClick HideThought
-        ]
-        [ Html.img [ Attr.src "images/arrow_left.svg" ] [] ]
