@@ -9,6 +9,7 @@ import Json.Encode
 import Mark exposing (Outcome(..))
 import Mark.Error
 import Msg exposing (Msg(..))
+import Styles
 
 
 type alias ArticleData =
@@ -89,7 +90,7 @@ document thoughtShowing =
                 [ Html.div
                     [ Attr.class "font-baskerville w-full"
                     ]
-                    (Html.div [ Attr.class "lg:grid lg:grid-cols-[2fr_3fr_2fr]" ]
+                    (Html.div [ Attr.class Styles.largeGrid ]
                         [ Html.h1 [ Attr.class "lg:col-start-2 mt-14 text-4xl p-4" ] meta.title ]
                         :: body
                     )
@@ -110,8 +111,9 @@ paragraph thoughtShowing =
     Mark.block "Paragraph"
         (Html.p
             [ Attr.class "relative text-xl sm:leading-relaxed"
-            , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
-            , Attr.class "grid-cols-[75%_100%_75%] lg:grid-cols-[2fr_3fr_2fr]"
+            , Attr.class "-translate-x-3/4 lg:translate-x-0"
+            , Attr.class Styles.smallGrid
+            , Attr.class Styles.largeGrid
             ]
         )
         (Mark.manyOf
@@ -128,7 +130,8 @@ paragraphFlat thoughtShowing =
         (Html.p
             [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
             , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
-            , Attr.class "grid-cols-[75%_100%_75%] lg:grid-cols-[2fr_3fr_2fr]"
+            , Attr.class Styles.smallGrid
+            , Attr.class Styles.largeGrid
             ]
         )
         (Mark.manyOf
@@ -220,14 +223,14 @@ viewImageRight thoughtShowing img offsetX offsetY =
                     [ ( "opacity-0", not thoughtShowing )
                     , ( "opacity-100", thoughtShowing )
                     ]
+                , Attr.class "flex shrink-0"
                 , Attr.class "pointer-events-none"
-                , Attr.class "w-full p-4"
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "lg:transition-none lg:opacity-100"
                 , Attr.class <| "lg:translate-x-[" ++ offsetX ++ "]"
                 , Attr.class <| "lg:translate-y-[" ++ offsetY ++ "]"
                 ]
-                [ Html.img [ Attr.src img, Attr.class "w-full" ] []
+                [ Html.img [ Attr.src img ] []
                 ]
     in
     Html.div
