@@ -224,6 +224,8 @@ viewImageRight thoughtShowing img offsetX offsetY =
                 , Attr.class "w-full p-4"
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "lg:transition-none lg:opacity-100"
+                , Attr.class <| "lg:translate-x-[" ++ offsetX ++ "]"
+                , Attr.class <| "lg:translate-y-[" ++ offsetY ++ "]"
                 ]
                 [ Html.img [ Attr.src img, Attr.class "w-full" ] []
                 ]
