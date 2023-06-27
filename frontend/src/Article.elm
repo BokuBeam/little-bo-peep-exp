@@ -88,9 +88,8 @@ document thoughtShowing =
             , body =
                 [ Html.div
                     [ Attr.class "font-baskerville"
-                    , Attr.class "flex flex-col"
                     ]
-                    (Html.h1 [ Attr.class "mt-14 text-4xl p-4" ] meta.title
+                    (Html.h1 [ Attr.class "mt-14 text-4xl p-4 col-start-2" ] meta.title
                         :: body
                     )
                 ]
@@ -108,11 +107,16 @@ document thoughtShowing =
 paragraph : Bool -> Mark.Block (Html Msg)
 paragraph thoughtShowing =
     Mark.block "Paragraph"
-        (Html.p [ Attr.class "relative indent-10 text-xl px-4 sm:leading-relaxed" ])
+        (Html.p
+            [ Attr.class "relative text-xl sm:leading-relaxed"
+            , Attr.class "grid -translate-x-3/4"
+            , Attr.style "grid-template-columns" "75% 100% 75%"
+            ]
+        )
         (Mark.manyOf
             [ math
             , thoughtMath thoughtShowing
-            , Mark.map (Html.span []) text
+            , Mark.map (Html.span [ Attr.class "first:indent-10 col-start-2 px-4" ]) text
             ]
         )
 
@@ -120,11 +124,16 @@ paragraph thoughtShowing =
 paragraphFlat : Bool -> Mark.Block (Html Msg)
 paragraphFlat thoughtShowing =
     Mark.block "ParagraphFlat"
-        (Html.p [ Attr.class "relative indent-0 text-xl px-4 sm:leading-relaxed" ])
+        (Html.p
+            [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
+            , Attr.class "grid -translate-x-3/4"
+            , Attr.style "grid-template-columns" "75% 100% 75%"
+            ]
+        )
         (Mark.manyOf
             [ math
             , thoughtMath thoughtShowing
-            , Mark.map (Html.span []) text
+            , Mark.map (Html.span [ Attr.class "col-start-2 px-4" ]) text
             ]
         )
 
@@ -185,17 +194,17 @@ thoughtMath thoughtShowing =
         |> Mark.field "img" Mark.string
         |> Mark.field "body" Mark.string
         |> Mark.field "offset" Mark.string
-        |> Mark.field "childOffset" Mark.string
         |> Mark.toBlock
 
 
-viewThoughtMath : Bool -> String -> String -> String -> String -> Html Msg
-viewThoughtMath thoughtShowing img body offset childOffset =
+viewThoughtMath : Bool -> String -> String -> String -> Html Msg
+viewThoughtMath thoughtShowing img body offset =
     let
         thoughtButton =
             Html.button
-                [ Attr.class "lg:hidden absolute bottom-0 right-0"
+                [ Attr.class "lg:hidden"
                 , Attr.class "transition-opacity duration-300"
+                , Attr.class "-ml-10 mt-16"
                 , Attr.classList
                     [ ( "opacity-0", thoughtShowing )
                     , ( "opacity-100", not thoughtShowing )
@@ -204,43 +213,26 @@ viewThoughtMath thoughtShowing img body offset childOffset =
                 ]
                 [ Icon.arrowUp ]
 
-        largeThought =
-            Html.div
-                [ Attr.class "opacity-0 lg:opacity-100 pointer-events-none"
-                , Attr.class "block absolute bottom-0 right-24"
-                , Attr.style "transform" ("translate" ++ offset)
-                ]
-                [ Html.span
-                    [ Attr.class "text-xl absolute"
-                    , Attr.style "transform" ("translate" ++ childOffset)
-                    ]
-                    [ mathText InlineMathMode body ]
-                , Html.img [ Attr.src img ] []
-                ]
-
-        smallThought =
+        thoughtCloud =
             Html.div
                 [ Attr.classList
                     [ ( "opacity-0", not thoughtShowing )
                     , ( "opacity-100", thoughtShowing )
                     ]
-                , Attr.class "transition-opacity duration-300 pointer-events-none"
+
+                -- , Attr.class "pointer-events-none"
+                , Attr.class "w-full p-4"
+                , Attr.class "transition-opacity duration-300"
                 , Attr.class "lg:transition-none lg:opacity-0"
-                , Attr.class "block absolute bottom-0 right-0"
-                , Attr.style "transform" ("translate" ++ offset)
                 ]
-                [ Html.span
-                    [ Attr.class "text-xl absolute"
-                    , Attr.style "transform" ("translate" ++ childOffset)
-                    ]
-                    [ mathText InlineMathMode body ]
-                , Html.img [ Attr.src img ] []
+                [ Html.img [ Attr.src img, Attr.class "w-full" ] []
                 ]
     in
-    Html.div [ Attr.class "relative top-[-1rem]" ]
+    Html.div
+        [ Attr.class "col-start-3 h-0 flex items-center justify-center"
+        ]
         [ thoughtButton
-        , largeThought
-        , smallThought
+        , thoughtCloud
         ]
 
 
@@ -249,7 +241,7 @@ math =
     Mark.block "Math"
         (\str ->
             Html.div
-                [ Attr.class "indent-0 text-xl min-h-[4rem] flex items-center justify-center" ]
+                [ Attr.class "indent-0 text-xl min-h-[4rem] flex items-center justify-center col-start-2" ]
                 [ mathText DisplayMathMode str ]
         )
         Mark.string
