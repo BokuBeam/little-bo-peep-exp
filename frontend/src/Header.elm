@@ -3,6 +3,7 @@ module Header exposing (view)
 import Html exposing (Html)
 import Html.Attributes as Attr
 import Icon
+import Styles
 
 
 view : Html msg
@@ -14,7 +15,8 @@ view =
         , Attr.class "h-14"
         ]
         [ Html.div
-            [ Attr.class "w-full md:w-192 lg:w-full lg:grid lg:grid-cols-[2fr_3fr_2fr] pl-4"
+            [ Attr.class "w-full md:w-192 lg:w-full pl-4"
+            , Attr.class Styles.largeGrid
             , Attr.id "Header"
             ]
             [ Html.div
