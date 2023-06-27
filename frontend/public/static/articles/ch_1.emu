@@ -14,7 +14,7 @@
 
     |> ImageRight
         img = images/svg_cloud_minus_two_squared.svg
-        offsetX = -4rem
+        offsetX = -2rem
         offsetY = 1.5rem
 
     and, in particular, it is /not/ true that

@@ -227,14 +227,21 @@ viewImageRight thoughtShowing img offsetX offsetY =
                 , Attr.class "pointer-events-none"
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "lg:transition-none lg:opacity-100"
-                , Attr.class <| "lg:translate-x-[" ++ offsetX ++ "]"
-                , Attr.class <| "lg:translate-y-[" ++ offsetY ++ "]"
+                , Attr.style "transform"
+                    (String.concat
+                        [ "translate("
+                        , offsetX
+                        , ", "
+                        , offsetY
+                        , ")"
+                        ]
+                    )
                 ]
                 [ Html.img [ Attr.src img ] []
                 ]
     in
     Html.div
-        [ Attr.class "col-start-3 h-0 flex items-center justify-center"
+        [ Attr.class "col-start-3 h-0 flex items-center justify-start"
         ]
         [ imageButton
         , image
