@@ -91,7 +91,7 @@ document thoughtShowing =
                     [ Attr.class "font-baskerville w-full"
                     ]
                     (Html.div [ Attr.class Styles.largeGrid ]
-                        [ Html.h1 [ Attr.class "lg:col-start-2 mt-14 text-4xl p-4" ] meta.title ]
+                        [ Html.h1 [ Attr.class "lg:col-start-2 mt-14 lg:mt-20 text-4xl p-4" ] meta.title ]
                         :: body
                     )
                 ]
