@@ -27,7 +27,7 @@ view data =
                 , Attr.class "flex justify-center align-center"
                 ]
                 [ Html.div
-                    [ Attr.class "w-full md:w-192 lg:w-128 transition"
+                    [ Attr.class "w-full md:w-192 lg:w-full transition"
                     , Attr.class "lg:overflow-visible lg:translate-x-0"
                     , Attr.classList
                         [ ( "-translate-x-3/4", data.thoughtShowing )
@@ -87,9 +87,10 @@ document thoughtShowing =
             { metadata = meta
             , body =
                 [ Html.div
-                    [ Attr.class "font-baskerville"
+                    [ Attr.class "font-baskerville w-full"
                     ]
-                    (Html.h1 [ Attr.class "mt-14 text-4xl p-4 col-start-2" ] meta.title
+                    (Html.div [ Attr.class "lg:grid lg:grid-cols-[2fr_3fr_2fr]" ]
+                        [ Html.h1 [ Attr.class "lg:col-start-2 mt-14 text-4xl p-4" ] meta.title ]
                         :: body
                     )
                 ]
@@ -109,8 +110,8 @@ paragraph thoughtShowing =
     Mark.block "Paragraph"
         (Html.p
             [ Attr.class "relative text-xl sm:leading-relaxed"
-            , Attr.class "grid -translate-x-3/4"
-            , Attr.style "grid-template-columns" "75% 100% 75%"
+            , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
+            , Attr.class "grid-cols-[75%_100%_75%] lg:grid-cols-[2fr_3fr_2fr]"
             ]
         )
         (Mark.manyOf
@@ -126,8 +127,8 @@ paragraphFlat thoughtShowing =
     Mark.block "ParagraphFlat"
         (Html.p
             [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
-            , Attr.class "grid -translate-x-3/4"
-            , Attr.style "grid-template-columns" "75% 100% 75%"
+            , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
+            , Attr.class "grid-cols-[75%_100%_75%] lg:grid-cols-[2fr_3fr_2fr]"
             ]
         )
         (Mark.manyOf
@@ -192,12 +193,13 @@ imageRight : Bool -> Mark.Block (Html Msg)
 imageRight thoughtShowing =
     Mark.record "ImageRight" (viewImageRight thoughtShowing)
         |> Mark.field "img" Mark.string
-        |> Mark.field "offset" Mark.string
+        |> Mark.field "offsetX" Mark.string
+        |> Mark.field "offsetY" Mark.string
         |> Mark.toBlock
 
 
-viewImageRight : Bool -> String -> String -> Html Msg
-viewImageRight thoughtShowing img offset =
+viewImageRight : Bool -> String -> String -> String -> Html Msg
+viewImageRight thoughtShowing img offsetX offsetY =
     let
         imageButton =
             Html.button
@@ -218,11 +220,10 @@ viewImageRight thoughtShowing img offset =
                     [ ( "opacity-0", not thoughtShowing )
                     , ( "opacity-100", thoughtShowing )
                     ]
-
-                -- , Attr.class "pointer-events-none"
+                , Attr.class "pointer-events-none"
                 , Attr.class "w-full p-4"
                 , Attr.class "transition-opacity duration-300"
-                , Attr.class "lg:transition-none lg:opacity-0"
+                , Attr.class "lg:transition-none lg:opacity-100"
                 ]
                 [ Html.img [ Attr.src img, Attr.class "w-full" ] []
                 ]
