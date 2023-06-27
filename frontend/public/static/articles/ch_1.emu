@@ -12,9 +12,8 @@
     |> Math
         \sqrt{(-2)^2} = 2
 
-    |> ThoughtMath
+    |> ImageRight
         img = images/svg_cloud_minus_two_squared.svg
-        body = (-2)^2 = 4,\,\, \sqrt{4} = 2
         offset = (22rem, 2rem)
 
     and, in particular, it is /not/ true that

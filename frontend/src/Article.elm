@@ -115,7 +115,7 @@ paragraph thoughtShowing =
         )
         (Mark.manyOf
             [ math
-            , thoughtMath thoughtShowing
+            , imageRight thoughtShowing
             , Mark.map (Html.span [ Attr.class "first:indent-10 col-start-2 px-4" ]) text
             ]
         )
@@ -132,7 +132,7 @@ paragraphFlat thoughtShowing =
         )
         (Mark.manyOf
             [ math
-            , thoughtMath thoughtShowing
+            , imageRight thoughtShowing
             , Mark.map (Html.span [ Attr.class "col-start-2 px-4" ]) text
             ]
         )
@@ -188,19 +188,18 @@ metadata =
         |> Mark.toBlock
 
 
-thoughtMath : Bool -> Mark.Block (Html Msg)
-thoughtMath thoughtShowing =
-    Mark.record "ThoughtMath" (viewThoughtMath thoughtShowing)
+imageRight : Bool -> Mark.Block (Html Msg)
+imageRight thoughtShowing =
+    Mark.record "ImageRight" (viewImageRight thoughtShowing)
         |> Mark.field "img" Mark.string
-        |> Mark.field "body" Mark.string
         |> Mark.field "offset" Mark.string
         |> Mark.toBlock
 
 
-viewThoughtMath : Bool -> String -> String -> String -> Html Msg
-viewThoughtMath thoughtShowing img body offset =
+viewImageRight : Bool -> String -> String -> Html Msg
+viewImageRight thoughtShowing img offset =
     let
-        thoughtButton =
+        imageButton =
             Html.button
                 [ Attr.class "lg:hidden"
                 , Attr.class "transition-opacity duration-300"
@@ -213,7 +212,7 @@ viewThoughtMath thoughtShowing img body offset =
                 ]
                 [ Icon.arrowUp ]
 
-        thoughtCloud =
+        image =
             Html.div
                 [ Attr.classList
                     [ ( "opacity-0", not thoughtShowing )
@@ -231,8 +230,8 @@ viewThoughtMath thoughtShowing img body offset =
     Html.div
         [ Attr.class "col-start-3 h-0 flex items-center justify-center"
         ]
-        [ thoughtButton
-        , thoughtCloud
+        [ imageButton
+        , image
         ]
 
 
