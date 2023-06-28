@@ -4,7 +4,7 @@
             "inputs": [
                 "frontend/src/Main.elm"
             ],
-            "output": "dist/elm.js"
+            "output": "dist/assets/elm.js"
         }
     }
 }

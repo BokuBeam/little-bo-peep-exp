@@ -3,15 +3,17 @@
   "version": "0.1",
   "scripts": {
     "postinstall": "elm-tooling install",
+    "prestart": "mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
+    "prebuild": "mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
     "start": "concurrently -c red,green,yellow,magenta,cyan \"npm:watch-*\"",
     "build": "concurrently \"npm:build-*\"",
     "watch-server": "cargo run",
     "watch-elm": "elm-watch hot",
-    "watch-tailwind": "tailwindcss -i ./frontend/public/styles.css -o ./dist/styles.css --watch",
+    "watch-tailwind": "tailwindcss -i ./frontend/public/styles.css -o ./dist/assets/styles.css --watch",
     "watch-static": "watchexec -w ./frontend/public/static npm run build-static",
     "build-elm": "elm-watch make --optimize",
-    "build-tailwind": "tailwindcss -i ./frontend/public/styles.css -o ./dist/styles.css --minify",
-    "build-static": "cp -r ./frontend/public/static/* ./dist"
+    "build-tailwind": "tailwindcss -i ./frontend/public/styles.css -o ./dist/assets/styles.css --minify",
+    "build-static": "cp -r ./frontend/public/static/* ./dist/"
   },
   "license": "ISC",
   "devDependencies": {

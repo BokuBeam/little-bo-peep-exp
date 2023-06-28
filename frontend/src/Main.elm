@@ -1,43 +1,51 @@
-port module Main exposing (main)
+module Main exposing (main)
 
 import Article
 import Browser
+import Browser.Navigation
 import Header
-import Html exposing (Html)
+import Home
+import Html
 import Html.Attributes as Attr
-import Html.Events exposing (onClick)
 import Http
 import Msg exposing (Msg(..))
-
-
-port onLoad : () -> Cmd msg
+import NotFound
+import Page exposing (Page)
+import Url exposing (Url)
 
 
 main : Program () Model Msg
 main =
-    Browser.document
+    Browser.application
         { init = init
         , update = update
         , subscriptions = always Sub.none
         , view = view
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
         }
 
 
 type alias Model =
-    { article : Maybe String
+    { page : Page
     , thoughtShowing : Bool
+    , key : Browser.Navigation.Key
+    , url : Url
     }
 
 
-init : () -> ( Model, Cmd Msg )
-init () =
-    ( { article = Nothing
+init : () -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
+init () url key =
+    ( { page = Page.fromUrl url
       , thoughtShowing = False
+      , key = key
+      , url = url
       }
-    , Http.get
-        { url = "/articles/ch_1.emu"
-        , expect = Http.expectString GotArticle
-        }
+    , Cmd.none
+      -- , Http.get
+      --     { url = "/articles/ch_1.emu"
+      --     , expect = Http.expectString GotArticle
+      --     }
     )
 
 
@@ -48,11 +56,27 @@ init () =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        UrlChanged url ->
+            ( { model | url = url }
+            , Cmd.none
+            )
+
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model
+                    , Browser.Navigation.pushUrl model.key
+                        (Url.toString url)
+                    )
+
+                Browser.External href ->
+                    ( model, Browser.Navigation.load href )
+
         GotArticle result ->
             case result of
                 Ok src ->
-                    ( { model | article = Just src }
-                    , onLoad ()
+                    ( { model | page = Page.Article src }
+                    , Cmd.none
                     )
 
                 Err _ ->
@@ -76,15 +100,18 @@ view model =
         [ Html.div
             [ Attr.class "w-full" ]
             [ Header.view
-            , case model.article of
-                Just article ->
+            , case model.page of
+                Page.Home ->
+                    Home.view
+
+                Page.Article article ->
                     Article.view
                         { article = article
                         , thoughtShowing = model.thoughtShowing
                         }
 
-                Nothing ->
-                    Html.span [] []
+                Page.NotFound ->
+                    NotFound.view
             ]
         ]
     }
