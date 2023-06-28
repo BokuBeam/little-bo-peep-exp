@@ -60,6 +60,7 @@ sideBarButton thoughtShowing =
         , Attr.class "transition duration-300"
         , Attr.class "lg:hidden fixed grid grid-cols-4 justify-end items-center"
         , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
+        , Attr.style "-webkit-tap-highlight-color" "transparent"
         , Attr.classList
             [ ( "opacity-0 pointer-events-none", not thoughtShowing )
             , ( "opacity-100 -translate-x-3/4 md:-translate-x-[85%]", thoughtShowing )
