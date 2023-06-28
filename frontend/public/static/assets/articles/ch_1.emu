@@ -13,7 +13,7 @@
         \sqrt{(-2)^2} = 2
 
     |> ImageRight
-        img = images/svg_cloud_minus_two_squared.svg
+        img = svg_cloud_minus_two_squared.svg
         offsetX = -2rem
         offsetY = 1.5rem
 

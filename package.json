@@ -7,7 +7,7 @@
     "prebuild": "mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
     "start": "concurrently -c red,green,yellow,magenta,cyan \"npm:watch-*\"",
     "build": "concurrently \"npm:build-*\"",
-    "watch-server": "cargo run",
+    "watch-server": "cargo watch -w ./backend/ -x run",
     "watch-elm": "elm-watch hot",
     "watch-tailwind": "tailwindcss -i ./frontend/public/styles.css -o ./dist/assets/styles.css --watch",
     "watch-static": "watchexec -w ./frontend/public/static npm run build-static",

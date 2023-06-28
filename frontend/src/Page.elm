@@ -14,7 +14,7 @@ pageParser : Parser (Page -> a) a
 pageParser =
     oneOf
         [ map Home top
-        , map Article string
+        , map Article <| s "article" </> string
         ]
 
 

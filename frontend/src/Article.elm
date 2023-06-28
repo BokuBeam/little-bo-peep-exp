@@ -1,5 +1,6 @@
 module Article exposing (view)
 
+import Assets
 import Browser exposing (document)
 import Html exposing (Html)
 import Html.Attributes as Attr
@@ -246,7 +247,7 @@ viewImageRight thoughtShowing img offsetX offsetY =
                         ]
                     )
                 ]
-                [ Html.img [ Attr.src img ] []
+                [ Html.img [ Attr.src <| Assets.image img ] []
                 ]
     in
     Html.div
