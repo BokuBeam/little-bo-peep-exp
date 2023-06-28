@@ -25,18 +25,19 @@ view data =
             Html.div
                 [ Attr.id "Article"
                 , Attr.class "w-full"
-                , Attr.class "flex justify-center align-center"
+                , Attr.class "absolute flex justify-center align-center"
                 ]
                 [ Html.div
-                    [ Attr.class "w-full md:w-192 lg:w-full transition"
-                    , Attr.class "lg:overflow-visible lg:translate-x-0"
+                    [ Attr.class "w-full md:w-192 lg:w-full transition duration-300"
+                    , Attr.class "lg:overflow-visible"
+                    , Attr.class "lg:translate-x-0"
                     , Attr.classList
-                        [ ( "-translate-x-3/4", data.thoughtShowing )
+                        [ ( "-translate-x-3/4 md:-translate-x-[85%]", data.thoughtShowing )
                         , ( "overflow-hidden", not data.thoughtShowing )
                         ]
                     ]
                     html.body
-                , modalButton data.thoughtShowing
+                , sideBarButton data.thoughtShowing
                 ]
 
         Mark.Almost { result, errors } ->
@@ -52,19 +53,26 @@ view data =
                 (viewErrors errors)
 
 
-modalButton : Bool -> Html Msg
-modalButton thoughtShowing =
+sideBarButton : Bool -> Html Msg
+sideBarButton thoughtShowing =
     Html.button
-        [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50 transition duration-300"
-        , Attr.class "lg:hidden fixed w-1/4 h-full left-0"
-        , Attr.class "flex flex-col items-center justify-center"
+        [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50"
+        , Attr.class "transition duration-300"
+        , Attr.class "lg:hidden fixed grid grid-cols-4 justify-end items-center"
+        , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
         , Attr.classList
             [ ( "opacity-0 pointer-events-none", not thoughtShowing )
-            , ( "opacity-100", thoughtShowing )
+            , ( "opacity-100 -translate-x-3/4 md:-translate-x-[85%]", thoughtShowing )
             ]
         , onClick HideThought
         ]
-        [ Icon.sideArrowLeft ]
+        [ Html.div
+            [ Attr.class "col-start-1 flex items-center justify-center" ]
+            [ Icon.sideArrowLeft ]
+        , Html.div
+            [ Attr.class "col-start-4 flex items-center justify-center" ]
+            [ Icon.sideArrowLeft ]
+        ]
 
 
 viewErrors : List Mark.Error.Error -> List (Html Msg)
