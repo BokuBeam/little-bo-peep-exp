@@ -67,7 +67,11 @@ fn entry_to_file(entry: fs::DirEntry) -> Result<(String, String), StatusCode> {
     let name: String = entry
         .file_name()
         .into_string()
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
+        .split('.')
+        .next()
+        .map(|s| s.to_owned())
+        .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?;
 
     entry
         .path()
