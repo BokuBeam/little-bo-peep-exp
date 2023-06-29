@@ -3,8 +3,8 @@
   "version": "0.1",
   "scripts": {
     "postinstall": "elm-tooling install",
-    "prestart": "mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
-    "prebuild": "mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
+    "prestart": "rm -r ./dist; mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
+    "prebuild": "rm -r ./dist; mkdir -p dist/assets/images dist/assets/fonts dist/assets/articles",
     "start": "concurrently -c red,green,yellow,magenta,cyan \"npm:watch-*\"",
     "build": "concurrently \"npm:build-*\"",
     "watch-server": "cargo watch -w ./backend/ -x run",
