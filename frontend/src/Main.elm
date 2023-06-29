@@ -36,16 +36,16 @@ type alias Model =
 
 init : () -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init () url key =
-    ( { page = Page.fromUrl url
+    let
+        page =
+            Page.fromUrl url
+    in
+    ( { page = page
       , thoughtShowing = False
       , key = key
       , url = url
       }
-    , Cmd.none
-      -- , Http.get
-      --     { url = "/articles/ch_1.emu"
-      --     , expect = Http.expectString GotArticle
-      --     }
+    , Page.cmd page
     )
 
 
@@ -100,18 +100,20 @@ view model =
         [ Html.div
             [ Attr.class "w-full" ]
             [ Header.view
-            , case model.page of
-                Page.Home ->
-                    Home.view
+            , Html.div [ Attr.class "pt-14 lg:pt-20" ]
+                [ case model.page of
+                    Page.Home ->
+                        Home.view
 
-                Page.Article article ->
-                    Article.view
-                        { article = article
-                        , thoughtShowing = model.thoughtShowing
-                        }
+                    Page.Article article ->
+                        Article.view
+                            { article = article
+                            , thoughtShowing = model.thoughtShowing
+                            }
 
-                Page.NotFound ->
-                    NotFound.view
+                    Page.NotFound ->
+                        NotFound.view
+                ]
             ]
         ]
     }

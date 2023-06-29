@@ -7,5 +7,10 @@ root =
 
 
 image : String -> String
-image src =
-    root ++ "/images/" ++ src
+image imageName =
+    root ++ "/images/" ++ imageName
+
+
+article : String -> String
+article articleName =
+    root ++ "/articles/" ++ articleName ++ ".emu"

@@ -10,8 +10,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() {
-    let service = ServeDir::new("dist/assets").fallback(ServeFile::new("dist/index.html"));
-
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
             std::env::var("RUST_LOG").unwrap_or_else(|_| "little-bo-peep-exp=debug".into()),

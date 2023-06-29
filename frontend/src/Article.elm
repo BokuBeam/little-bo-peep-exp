@@ -47,11 +47,15 @@ view data =
             Html.div []
                 [ Html.div [] (viewErrors errors)
                 , Html.div [] result.body
+                , Html.text "Almost"
                 ]
 
         Mark.Failure errors ->
             Html.div []
-                (viewErrors errors)
+                [ Html.text "Article error:"
+                , Html.div []
+                    (viewErrors errors)
+                ]
 
 
 sideBarButton : Bool -> Html Msg
@@ -101,7 +105,7 @@ document thoughtShowing =
                     [ Attr.class "font-baskerville w-full"
                     ]
                     (Html.div [ Attr.class Styles.largeGrid ]
-                        [ Html.h1 [ Attr.class "lg:col-start-2 mt-14 lg:mt-20 text-4xl p-4" ] meta.title ]
+                        [ Html.h1 [ Attr.class "lg:col-start-2 text-4xl p-4" ] meta.title ]
                         :: body
                     )
                 ]
