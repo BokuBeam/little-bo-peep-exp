@@ -79,8 +79,26 @@ update msg model =
                     , Cmd.none
                     )
 
-                Err _ ->
-                    ( model, Cmd.none )
+                Err error ->
+                    let
+                        errorString =
+                            case error of
+                                Http.BadUrl s ->
+                                    s
+
+                                Http.Timeout ->
+                                    "Request timed out"
+
+                                Http.NetworkError ->
+                                    "Network error"
+
+                                Http.BadStatus status ->
+                                    "Bad status: " ++ String.fromInt status
+
+                                Http.BadBody body ->
+                                    "Bad body: " ++ body
+                    in
+                    ( { model | page = Page.Error errorString }, Cmd.none )
 
         ShowThought ->
             ( { model | thoughtShowing = True }, Cmd.none )
@@ -111,8 +129,8 @@ view model =
                             , thoughtShowing = model.thoughtShowing
                             }
 
-                    Page.NotFound ->
-                        NotFound.view
+                    Page.Error error ->
+                        NotFound.view error
                 ]
             ]
         ]

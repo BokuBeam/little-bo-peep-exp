@@ -10,7 +10,7 @@ import Url.Parser exposing ((</>), Parser, int, map, oneOf, parse, s, string, to
 type Page
     = Home
     | Article String
-    | NotFound
+    | Error String
 
 
 pageParser : Parser (Page -> a) a
@@ -23,7 +23,7 @@ pageParser =
 
 fromUrl : Url -> Page
 fromUrl url =
-    parse pageParser url |> Maybe.withDefault NotFound
+    parse pageParser url |> Maybe.withDefault (Error "No page found at that URL")
 
 
 cmd : Page -> Cmd Msg
@@ -38,5 +38,5 @@ cmd page =
                 , expect = Http.expectString GotArticle
                 }
 
-        NotFound ->
+        Error _ ->
             Cmd.none
