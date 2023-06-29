@@ -45,7 +45,10 @@ init () url key =
       , key = key
       , url = url
       }
-    , Page.cmd page
+    , Http.get
+        { url = "api/articles"
+        , expect = Http.expectString GotArticle
+        }
     )
 
 

@@ -1,5 +1,10 @@
-use axum::{http::StatusCode, routing::get_service, Router};
-use std::net::SocketAddr;
+use axum::{
+    http::StatusCode,
+    routing::{get, get_service},
+    Json, Router,
+};
+use std::{collections::HashMap, fs, io};
+use std::{io::Read, net::SocketAddr};
 use tower::ServiceBuilder;
 use tower_http::{
     cors::{self, CorsLayer},
@@ -18,6 +23,7 @@ async fn main() {
         .init();
 
     let app = Router::new()
+        .route("/api/articles", get(get_articles))
         .nest_service(
             "/assets",
             get_service(ServeDir::new("dist/assets")).handle_error(
@@ -47,4 +53,38 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+
+async fn get_articles() -> Result<Json<HashMap<String, String>>, StatusCode> {
+    fs::read_dir("dist/assets/articles/")
+        .map(|read_dir| read_dir.map(|entry| entry_to_file(entry.unwrap())))
+        .unwrap()
+        .collect::<Result<HashMap<_, _>, StatusCode>>()
+        .map(|res| Json(res))
+}
+
+fn entry_to_file(entry: fs::DirEntry) -> Result<(String, String), StatusCode> {
+    let name: String = entry
+        .file_name()
+        .into_string()
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    entry
+        .path()
+        .into_os_string()
+        .into_string()
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)
+        .and_then(|entry_string| open_file(entry_string))
+        .map(|contents| (name, contents))
+}
+
+fn open_file(path: String) -> Result<String, StatusCode> {
+    let file = fs::File::open(path).map_err(|_| StatusCode::BAD_REQUEST)?;
+    let mut buf_reader = io::BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader
+        .read_to_string(&mut contents)
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    Ok(contents)
 }
