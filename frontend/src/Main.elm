@@ -156,6 +156,7 @@ view model =
                 [ Html.div
                     [ Attr.class "w-full" ]
                     [ Header.view
+                    , Nav.view data.nav
                     , Html.div [ Attr.class "pt-14 lg:pt-20" ]
                         [ case data.page of
                             Page.Home ->

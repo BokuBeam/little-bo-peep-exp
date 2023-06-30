@@ -14,7 +14,7 @@ view =
         , Attr.class "h-14"
         ]
         [ Html.div
-            [ Attr.class "w-full md:w-192 lg:w-full pl-4"
+            [ Attr.class "flex w-full md:w-192 lg:w-full pl-4"
             , Attr.class Styles.largeGrid
             , Attr.id "Header"
             ]
