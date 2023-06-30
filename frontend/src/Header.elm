@@ -2,7 +2,6 @@ module Header exposing (view)
 
 import Html exposing (Html)
 import Html.Attributes as Attr
-import Icon
 import Styles
 
 
@@ -24,5 +23,6 @@ view =
                 , Attr.class "flex-auto self-end lg:col-start-2 lg:pl-2"
                 ]
                 [ Html.text "Little Bo Peep" ]
+            , Html.button [] [ Html.text "Menu" ]
             ]
         ]

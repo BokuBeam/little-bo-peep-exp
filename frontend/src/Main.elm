@@ -9,6 +9,7 @@ import Home
 import Html
 import Html.Attributes as Attr
 import Http
+import Nav exposing (Nav)
 import NotFound
 import Page exposing (Page)
 import Url exposing (Url)
@@ -32,18 +33,20 @@ main =
 
 type Model
     = Loading UrlData
-    | Loaded
-        UrlData
-        { page : Page
-        , thoughtShowing : Bool
-        , articles : Articles
-        }
+    | Loaded UrlData PageData
     | Error UrlData
 
 
 type alias UrlData =
     { key : Browser.Navigation.Key
     , url : Url
+    }
+
+
+type alias PageData =
+    { page : Page
+    , articles : Articles
+    , nav : Nav
     }
 
 
@@ -78,8 +81,8 @@ getKey model =
 
 
 type Msg
-    = ShowThought
-    | HideThought
+    = ShowRightSide
+    | ShowArticle
     | UrlChanged Url
     | LinkClicked Browser.UrlRequest
     | GotArticles (Result Http.Error Articles)
@@ -101,7 +104,7 @@ update msg model =
                     ( Loaded urlData
                         { articles = articles
                         , page = Page.fromUrl urlData.url
-                        , thoughtShowing = False
+                        , nav = Nav.fromArticles articles
                         }
                     , Cmd.none
                     )
@@ -125,11 +128,11 @@ update msg model =
                 Browser.External href ->
                     ( model, Browser.Navigation.load href )
 
-        ( Loaded urlData data, ShowThought ) ->
-            ( Loaded urlData { data | thoughtShowing = True }, Cmd.none )
+        ( Loaded urlData data, ShowRightSide ) ->
+            ( Loaded urlData { data | page = Page.showSideRight data.page }, Cmd.none )
 
-        ( Loaded urlData data, HideThought ) ->
-            ( Loaded urlData { data | thoughtShowing = False }, Cmd.none )
+        ( Loaded urlData data, ShowArticle ) ->
+            ( Loaded urlData { data | page = Page.showArticle data.page }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
@@ -158,15 +161,15 @@ view model =
                             Page.Home ->
                                 Home.view
 
-                            Page.Article articleKey ->
+                            Page.Article articleState articleKey ->
                                 Articles.get articleKey data.articles
                                     |> Maybe.map
                                         (\article ->
                                             Article.view
                                                 { article = article
-                                                , thoughtShowing = False
-                                                , hideThoughtMsg = HideThought
-                                                , showThoughtMsg = ShowThought
+                                                , articleState = articleState
+                                                , hideThoughtMsg = ShowArticle
+                                                , showThoughtMsg = ShowRightSide
                                                 }
                                         )
                                     |> Maybe.withDefault

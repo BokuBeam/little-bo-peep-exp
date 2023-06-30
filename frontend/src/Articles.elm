@@ -25,3 +25,8 @@ decodeArticles =
 get : String -> Articles -> Maybe String
 get key (Articles dict) =
     Dict.get key dict
+
+
+toList : Articles -> List ( String, String )
+toList (Articles articles) =
+    Dict.toList articles

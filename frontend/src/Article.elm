@@ -1,4 +1,4 @@
-module Article exposing (view)
+module Article exposing (ArticleState(..), view)
 
 import Assets
 import Browser exposing (document)
@@ -14,10 +14,15 @@ import Styles
 
 type alias ArticleData msg =
     { article : String
-    , thoughtShowing : Bool
+    , articleState : ArticleState
     , hideThoughtMsg : msg
     , showThoughtMsg : msg
     }
+
+
+type ArticleState
+    = ShowArticle
+    | ShowSideRight
 
 
 type alias DocumentData msg =
@@ -66,10 +71,12 @@ view data =
                     [ Attr.class "w-full md:w-192 lg:w-full transition duration-300"
                     , Attr.class "lg:overflow-visible"
                     , Attr.class "lg:translate-x-0"
-                    , Attr.classList
-                        [ ( "-translate-x-3/4 md:-translate-x-[85%]", data.thoughtShowing )
-                        , ( "overflow-hidden", not data.thoughtShowing )
-                        ]
+                    , case data.articleState of
+                        ShowArticle ->
+                            Attr.class "overflow-hidden"
+
+                        ShowSideRight ->
+                            Attr.class "-translate-x-3/4 md:-translate-x-[85%]"
                     ]
                     html.body
                 , sideBarButton data
@@ -107,10 +114,12 @@ sideBarButton data =
         , Attr.class "lg:hidden fixed grid grid-cols-4 justify-end items-center"
         , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
         , Attr.style "-webkit-tap-highlight-color" "transparent"
-        , Attr.classList
-            [ ( "opacity-0 pointer-events-none", not data.thoughtShowing )
-            , ( "opacity-100 -translate-x-3/4 md:-translate-x-[85%]", data.thoughtShowing )
-            ]
+        , case data.articleState of
+            ShowArticle ->
+                Attr.class "opacity-0 pointer-events-none"
+
+            ShowSideRight ->
+                Attr.class "opacity-100 -translate-x-3/4 md:-translate-x-[85%]"
         , onClick data.hideThoughtMsg
         ]
         [ Html.div
@@ -215,20 +224,24 @@ viewImageRight data img offsetX offsetY =
                 [ Attr.class "lg:hidden"
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "-ml-10 mt-16"
-                , Attr.classList
-                    [ ( "opacity-0", data.thoughtShowing )
-                    , ( "opacity-100", not data.thoughtShowing )
-                    ]
+                , case data.articleState of
+                    ShowArticle ->
+                        Attr.class "opacity-100"
+
+                    ShowSideRight ->
+                        Attr.class "opacity-0"
                 , onClick data.showThoughtMsg
                 ]
                 [ Icon.arrowUp ]
 
         image =
             Html.div
-                [ Attr.classList
-                    [ ( "opacity-0", not data.thoughtShowing )
-                    , ( "opacity-100", data.thoughtShowing )
-                    ]
+                [ case data.articleState of
+                    ShowArticle ->
+                        Attr.class "opacity-0"
+
+                    ShowSideRight ->
+                        Attr.class "opacity-100"
                 , Attr.class "flex shrink-0"
                 , Attr.class "pointer-events-none"
                 , Attr.class "transition-opacity duration-300"
