@@ -1,10 +1,7 @@
 module Page exposing (Page(..), fromUrl)
 
-import Assets
-import Http
-import Msg exposing (Msg(..))
 import Url exposing (Url)
-import Url.Parser exposing ((</>), Parser, int, map, oneOf, parse, s, string, top)
+import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string, top)
 
 
 type Page

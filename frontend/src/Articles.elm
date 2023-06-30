@@ -1,16 +1,16 @@
-module Articles exposing (Articles, get)
+module Articles exposing (..)
 
 import Dict exposing (Dict)
 import Http
-import Json.Decode exposing (Decoder, dict, string)
+import Json.Decode as Decode exposing (Decoder)
 
 
-type alias Articles =
-    Dict String String
+type Articles
+    = Articles (Dict String String)
 
 
-get : (Result Http.Error Articles -> msg) -> Cmd msg
-get msg =
+request : (Result Http.Error Articles -> msg) -> Cmd msg
+request msg =
     Http.get
         { url = "/api/articles"
         , expect = Http.expectJson msg decodeArticles
@@ -19,4 +19,9 @@ get msg =
 
 decodeArticles : Decoder Articles
 decodeArticles =
-    dict string
+    Decode.dict Decode.string |> Decode.map Articles
+
+
+get : String -> Articles -> Maybe String
+get key (Articles dict) =
+    Dict.get key dict

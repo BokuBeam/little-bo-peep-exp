@@ -9,19 +9,53 @@ import Icon
 import Json.Encode
 import Mark exposing (Outcome(..))
 import Mark.Error
-import Msg exposing (Msg(..))
 import Styles
 
 
-type alias ArticleData =
+type alias ArticleData msg =
     { article : String
     , thoughtShowing : Bool
+    , hideThoughtMsg : msg
+    , showThoughtMsg : msg
     }
 
 
-view : ArticleData -> Html Msg
+type alias DocumentData msg =
+    { metadata :
+        { title : List (Html msg)
+        }
+    , body : List (Html msg)
+    }
+
+
+document : ArticleData msg -> Mark.Document (DocumentData msg)
+document data =
+    Mark.documentWith
+        (\meta body ->
+            { metadata = meta
+            , body =
+                [ Html.div
+                    [ Attr.class "font-baskerville w-full"
+                    ]
+                    (Html.div [ Attr.class Styles.largeGrid ]
+                        [ Html.h1 [ Attr.class "lg:col-start-2 text-4xl p-4" ] meta.title ]
+                        :: body
+                    )
+                ]
+            }
+        )
+        { metadata = metadata
+        , body =
+            Mark.manyOf
+                [ paragraph data
+                , paragraphFlat data
+                ]
+        }
+
+
+view : ArticleData msg -> Html msg
 view data =
-    case Mark.compile (document data.thoughtShowing) data.article of
+    case Mark.compile (document data) data.article of
         Mark.Success html ->
             Html.div
                 [ Attr.id "Article"
@@ -38,7 +72,7 @@ view data =
                         ]
                     ]
                     html.body
-                , sideBarButton data.thoughtShowing
+                , sideBarButton data
                 ]
 
         Mark.Almost { result, errors } ->
@@ -58,8 +92,15 @@ view data =
                 ]
 
 
-sideBarButton : Bool -> Html Msg
-sideBarButton thoughtShowing =
+viewErrors : List Mark.Error.Error -> List (Html msg)
+viewErrors errors =
+    List.map
+        (Mark.Error.toHtml Mark.Error.Light)
+        errors
+
+
+sideBarButton : ArticleData msg -> Html msg
+sideBarButton data =
     Html.button
         [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50"
         , Attr.class "transition duration-300"
@@ -67,10 +108,10 @@ sideBarButton thoughtShowing =
         , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
         , Attr.style "-webkit-tap-highlight-color" "transparent"
         , Attr.classList
-            [ ( "opacity-0 pointer-events-none", not thoughtShowing )
-            , ( "opacity-100 -translate-x-3/4 md:-translate-x-[85%]", thoughtShowing )
+            [ ( "opacity-0 pointer-events-none", not data.thoughtShowing )
+            , ( "opacity-100 -translate-x-3/4 md:-translate-x-[85%]", data.thoughtShowing )
             ]
-        , onClick HideThought
+        , onClick data.hideThoughtMsg
         ]
         [ Html.div
             [ Attr.class "col-start-1 flex items-center justify-center" ]
@@ -81,47 +122,8 @@ sideBarButton thoughtShowing =
         ]
 
 
-viewErrors : List Mark.Error.Error -> List (Html Msg)
-viewErrors errors =
-    List.map
-        (Mark.Error.toHtml Mark.Error.Light)
-        errors
-
-
-document :
-    Bool
-    ->
-        Mark.Document
-            { metadata :
-                { title : List (Html Msg) }
-            , body : List (Html Msg)
-            }
-document thoughtShowing =
-    Mark.documentWith
-        (\meta body ->
-            { metadata = meta
-            , body =
-                [ Html.div
-                    [ Attr.class "font-baskerville w-full"
-                    ]
-                    (Html.div [ Attr.class Styles.largeGrid ]
-                        [ Html.h1 [ Attr.class "lg:col-start-2 text-4xl p-4" ] meta.title ]
-                        :: body
-                    )
-                ]
-            }
-        )
-        { metadata = metadata
-        , body =
-            Mark.manyOf
-                [ paragraph thoughtShowing
-                , paragraphFlat thoughtShowing
-                ]
-        }
-
-
-paragraph : Bool -> Mark.Block (Html Msg)
-paragraph thoughtShowing =
+paragraph : ArticleData msg -> Mark.Block (Html msg)
+paragraph data =
     Mark.block "Paragraph"
         (Html.p
             [ Attr.class "relative text-xl sm:leading-relaxed"
@@ -132,14 +134,14 @@ paragraph thoughtShowing =
         )
         (Mark.manyOf
             [ math
-            , imageRight thoughtShowing
+            , imageRight data
             , Mark.map (Html.span [ Attr.class "first:indent-10 col-start-2 px-4" ]) text
             ]
         )
 
 
-paragraphFlat : Bool -> Mark.Block (Html Msg)
-paragraphFlat thoughtShowing =
+paragraphFlat : ArticleData msg -> Mark.Block (Html msg)
+paragraphFlat data =
     Mark.block "ParagraphFlat"
         (Html.p
             [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
@@ -150,17 +152,13 @@ paragraphFlat thoughtShowing =
         )
         (Mark.manyOf
             [ math
-            , imageRight thoughtShowing
+            , imageRight data
             , Mark.map (Html.span [ Attr.class "col-start-2 px-4" ]) text
             ]
         )
 
 
-
-{- Handle Text -}
-
-
-text : Mark.Block (List (Html Msg))
+text : Mark.Block (List (Html msg))
 text =
     Mark.textWith
         { view = viewText
@@ -172,13 +170,7 @@ text =
         }
 
 
-viewText :
-    { a
-        | bold : Bool
-        , italic : Bool
-    }
-    -> String
-    -> Html Msg
+viewText : { a | bold : Bool, italic : Bool } -> String -> Html msg
 viewText styles string =
     if styles.bold || styles.italic then
         Html.span
@@ -195,7 +187,7 @@ viewText styles string =
         Html.text string
 
 
-metadata : Mark.Block { title : List (Html Msg) }
+metadata : Mark.Block { title : List (Html msg) }
 metadata =
     Mark.record "Article"
         (\title ->
@@ -206,17 +198,17 @@ metadata =
         |> Mark.toBlock
 
 
-imageRight : Bool -> Mark.Block (Html Msg)
-imageRight thoughtShowing =
-    Mark.record "ImageRight" (viewImageRight thoughtShowing)
+imageRight : ArticleData msg -> Mark.Block (Html msg)
+imageRight data =
+    Mark.record "ImageRight" (viewImageRight data)
         |> Mark.field "img" Mark.string
         |> Mark.field "offsetX" Mark.string
         |> Mark.field "offsetY" Mark.string
         |> Mark.toBlock
 
 
-viewImageRight : Bool -> String -> String -> String -> Html Msg
-viewImageRight thoughtShowing img offsetX offsetY =
+viewImageRight : ArticleData msg -> String -> String -> String -> Html msg
+viewImageRight data img offsetX offsetY =
     let
         imageButton =
             Html.button
@@ -224,18 +216,18 @@ viewImageRight thoughtShowing img offsetX offsetY =
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "-ml-10 mt-16"
                 , Attr.classList
-                    [ ( "opacity-0", thoughtShowing )
-                    , ( "opacity-100", not thoughtShowing )
+                    [ ( "opacity-0", data.thoughtShowing )
+                    , ( "opacity-100", not data.thoughtShowing )
                     ]
-                , onClick ShowThought
+                , onClick data.showThoughtMsg
                 ]
                 [ Icon.arrowUp ]
 
         image =
             Html.div
                 [ Attr.classList
-                    [ ( "opacity-0", not thoughtShowing )
-                    , ( "opacity-100", thoughtShowing )
+                    [ ( "opacity-0", not data.thoughtShowing )
+                    , ( "opacity-100", data.thoughtShowing )
                     ]
                 , Attr.class "flex shrink-0"
                 , Attr.class "pointer-events-none"
@@ -262,7 +254,7 @@ viewImageRight thoughtShowing img offsetX offsetY =
         ]
 
 
-math : Mark.Block (Html Msg)
+math : Mark.Block (Html msg)
 math =
     Mark.block "Math"
         (\str ->
@@ -278,7 +270,7 @@ type DisplayMode
     | DisplayMathMode
 
 
-mathText : DisplayMode -> String -> Html Msg
+mathText : DisplayMode -> String -> Html msg
 mathText displayMode content =
     let
         inline =
