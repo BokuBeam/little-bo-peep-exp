@@ -1,4 +1,4 @@
-module Page exposing (Page(..), cmd, fromUrl)
+module Page exposing (Page(..), fromUrl)
 
 import Assets
 import Http
@@ -24,19 +24,3 @@ pageParser =
 fromUrl : Url -> Page
 fromUrl url =
     parse pageParser url |> Maybe.withDefault (Error "No page found at that URL")
-
-
-cmd : Page -> Cmd Msg
-cmd page =
-    case page of
-        Home ->
-            Cmd.none
-
-        Article name ->
-            Http.get
-                { url = Assets.article name
-                , expect = Http.expectString GotArticle
-                }
-
-        Error _ ->
-            Cmd.none

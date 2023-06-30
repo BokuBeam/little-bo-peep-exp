@@ -1,13 +1,17 @@
 module Main exposing (main)
 
 import Article
+import Articles exposing (Articles)
 import Browser
 import Browser.Navigation
+import Dict exposing (Dict, get)
 import Header
 import Home
 import Html
 import Html.Attributes as Attr
 import Http
+import Json.Decode
+import Model exposing (Model(..))
 import Msg exposing (Msg(..))
 import NotFound
 import Page exposing (Page)
@@ -26,29 +30,10 @@ main =
         }
 
 
-type alias Model =
-    { page : Page
-    , thoughtShowing : Bool
-    , key : Browser.Navigation.Key
-    , url : Url
-    }
-
-
 init : () -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
-init () url key =
-    let
-        page =
-            Page.fromUrl url
-    in
-    ( { page = page
-      , thoughtShowing = False
-      , key = key
-      , url = url
-      }
-    , Http.get
-        { url = "api/articles"
-        , expect = Http.expectString GotArticle
-        }
+init _ url key =
+    ( Loading { key = key, url = url }
+    , Articles.get GotArticles
     )
 
 
@@ -58,56 +43,31 @@ init () url key =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        UrlChanged url ->
-            ( { model | url = url }
+    case ( model, msg ) of
+        ( m, UrlChanged url ) ->
+            ( Model.updateUrl url m
             , Cmd.none
             )
 
-        LinkClicked urlRequest ->
+        ( m, LinkClicked urlRequest ) ->
             case urlRequest of
                 Browser.Internal url ->
                     ( model
-                    , Browser.Navigation.pushUrl model.key
+                    , Browser.Navigation.pushUrl (Model.getKey m)
                         (Url.toString url)
                     )
 
                 Browser.External href ->
                     ( model, Browser.Navigation.load href )
 
-        GotArticle result ->
-            case result of
-                Ok src ->
-                    ( { model | page = Page.Article src }
-                    , Cmd.none
-                    )
+        ( Loaded urlData data, ShowThought ) ->
+            ( Loaded urlData { data | thoughtShowing = True }, Cmd.none )
 
-                Err error ->
-                    let
-                        errorString =
-                            case error of
-                                Http.BadUrl s ->
-                                    s
+        ( Loaded urlData data, HideThought ) ->
+            ( Loaded urlData { data | thoughtShowing = False }, Cmd.none )
 
-                                Http.Timeout ->
-                                    "Request timed out"
-
-                                Http.NetworkError ->
-                                    "Network error"
-
-                                Http.BadStatus status ->
-                                    "Bad status: " ++ String.fromInt status
-
-                                Http.BadBody body ->
-                                    "Bad body: " ++ body
-                    in
-                    ( { model | page = Page.Error errorString }, Cmd.none )
-
-        ShowThought ->
-            ( { model | thoughtShowing = True }, Cmd.none )
-
-        HideThought ->
-            ( { model | thoughtShowing = False }, Cmd.none )
+        _ ->
+            ( model, Cmd.none )
 
 
 
@@ -116,25 +76,37 @@ update msg model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "Little Bo Peep"
-    , body =
-        [ Html.div
-            [ Attr.class "w-full" ]
-            [ Header.view
-            , Html.div [ Attr.class "pt-14 lg:pt-20" ]
-                [ case model.page of
-                    Page.Home ->
-                        Home.view
+    case model of
+        Loading _ ->
+            { title = "Little Bo Peep | Loading"
+            , body = [ Html.div [] [ Html.text "Loading" ] ]
+            }
 
-                    Page.Article article ->
-                        Article.view
-                            { article = article
-                            , thoughtShowing = model.thoughtShowing
-                            }
+        Loaded _ data ->
+            { title = "Little Bo Peep"
+            , body =
+                [ Html.div
+                    [ Attr.class "w-full" ]
+                    [ Header.view
+                    , Html.div [ Attr.class "pt-14 lg:pt-20" ]
+                        [ case data.page of
+                            Page.Home ->
+                                Home.view
 
-                    Page.Error error ->
-                        NotFound.view error
+                            Page.Article article ->
+                                Article.view
+                                    { article = article
+                                    , thoughtShowing = data.thoughtShowing
+                                    }
+
+                            Page.Error error ->
+                                NotFound.view error
+                        ]
+                    ]
                 ]
-            ]
-        ]
-    }
+            }
+
+        Error _ ->
+            { title = "Litte Bo Beep | Error"
+            , body = [ Html.div [] [ Html.text "Error" ] ]
+            }
