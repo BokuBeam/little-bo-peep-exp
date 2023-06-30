@@ -1,20 +1,17 @@
 module Main exposing (main)
 
 import Article
-import Articles exposing (Articles)
+import Articles
 import Browser
 import Browser.Navigation
-import Dict exposing (Dict, get)
 import Header
 import Home
 import Html
 import Html.Attributes as Attr
-import Http
-import Json.Decode
 import Model exposing (Model(..))
 import Msg exposing (Msg(..))
 import NotFound
-import Page exposing (Page)
+import Page
 import Url exposing (Url)
 
 
@@ -44,6 +41,20 @@ init _ url key =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( model, msg ) of
+        ( Loading urlData, GotArticles result ) ->
+            case result of
+                Ok articles ->
+                    ( Loaded urlData
+                        { articles = articles
+                        , page = Page.fromUrl urlData.url
+                        , thoughtShowing = False
+                        }
+                    , Cmd.none
+                    )
+
+                Err error ->
+                    ( Error urlData, Cmd.none )
+
         ( m, UrlChanged url ) ->
             ( Model.updateUrl url m
             , Cmd.none

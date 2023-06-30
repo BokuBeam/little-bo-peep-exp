@@ -1,18 +1,8 @@
 module Model exposing (..)
 
-import Article
 import Articles exposing (Articles)
-import Browser
 import Browser.Navigation
-import Dict exposing (Dict, get)
-import Header
-import Home
-import Html
-import Html.Attributes as Attr
-import Http
-import Json.Decode
 import Msg exposing (Msg(..))
-import NotFound
 import Page exposing (Page)
 import Url exposing (Url)
 
