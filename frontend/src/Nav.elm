@@ -103,7 +103,10 @@ view : NavMsg msg -> Nav -> Html msg
 view { openMsg, closeMsg } nav =
     case nav.state of
         Open ->
-            Html.div [ Attr.class "z-50 fixed right-0 flex self-start" ]
+            Html.div
+                [ Attr.class "z-50 fixed right-0 flex self-start"
+                , Attr.class "font-baskerville text-xl leading-loose"
+                ]
                 [ menuButton closeMsg
                 , Html.div
                     [ Attr.class "h-screen z-50 p-4"
@@ -113,7 +116,7 @@ view { openMsg, closeMsg } nav =
                 ]
 
         Closed ->
-            Html.div [ Attr.class "absolute lg:fixed right-0" ] [ menuButton openMsg ]
+            Html.div [ Attr.class "absolute right-0" ] [ menuButton openMsg ]
 
 
 menuButton : msg -> Html msg
