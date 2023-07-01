@@ -183,13 +183,9 @@ view model =
                     , Html.div [ Attr.class "pt-14 lg:pt-20" ]
                         [ case data.page of
                             Page.Home ->
-                                Home.view
+                                Home.view data.nav
 
                             Page.Article articleState articleKey ->
-                                -- TODO: Look at improving performance by
-                                -- rendering all HTML up front (maybe with Lazy)
-                                -- and then just hiding/showing the active
-                                -- page.
                                 Articles.get articleKey data.articles
                                     |> Maybe.map
                                         (\article ->

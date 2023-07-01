@@ -112,7 +112,7 @@ view { openMsg, closeMsg } nav =
                     [ Attr.class "h-screen z-50 p-4"
                     , Attr.class "bg-stone-100 h-full"
                     ]
-                    [ Html.ul [] <| List.map viewEntry nav.entries ]
+                    [ viewList nav ]
                 ]
 
         Closed ->
@@ -130,12 +130,17 @@ menuButton msg =
         [ Icon.menu ]
 
 
+viewList : Nav -> Html msg
+viewList nav =
+    Html.ul [] <| List.map viewEntry nav.entries
+
+
 viewEntry : NavEntry -> Html msg
 viewEntry entry =
     Html.li []
         [ Html.a
             [ Attr.href entry.url
-            , Attr.class "text-stone-600 hover:text-sky-700"
+            , Attr.class "text-stone-900 hover:text-sky-800"
             ]
             [ Html.text entry.title ]
         ]
