@@ -112,8 +112,10 @@ update msg model =
                 Err error ->
                     ( Error urlData, Cmd.none )
 
-        ( m, UrlChanged url ) ->
-            ( updateUrl url m
+        ( Loaded urlData data, UrlChanged url ) ->
+            ( Loaded
+                { urlData | url = url }
+                { data | page = Page.fromUrl url }
             , Cmd.none
             )
 
