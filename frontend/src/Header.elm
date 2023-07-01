@@ -22,7 +22,7 @@ view =
                 [ Attr.class "font-clickerscript text-3xl pt-2"
                 , Attr.class "flex-auto self-end lg:col-start-2 lg:pl-2"
                 ]
-                [ Html.text "Little Bo Peep" ]
+                [ Html.a [ Attr.href "/" ] [ Html.text "Little Bo Peep" ] ]
             , Html.button [] [ Html.text "Menu" ]
             ]
         ]

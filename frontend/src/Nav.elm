@@ -32,7 +32,7 @@ fromArticles articles =
             |> List.map
                 (\( url, article ) ->
                     { title = parse article
-                    , url = url
+                    , url = "/article/" ++ url
                     }
                 )
     }

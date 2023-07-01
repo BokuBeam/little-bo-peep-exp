@@ -165,6 +165,10 @@ view model =
                                 Home.view
 
                             Page.Article articleState articleKey ->
+                                -- TODO: Look at improving performance by
+                                -- rendering all HTML up front (maybe with Lazy)
+                                -- and then just hiding/showing the active
+                                -- page.
                                 Articles.get articleKey data.articles
                                     |> Maybe.map
                                         (\article ->
