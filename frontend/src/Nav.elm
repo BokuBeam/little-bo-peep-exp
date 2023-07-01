@@ -105,7 +105,7 @@ view { openMsg, closeMsg } nav =
         Open ->
             Html.div
                 [ Attr.class "z-50 fixed right-0 flex self-start"
-                , Attr.class "font-baskerville text-xl leading-loose"
+                , Attr.class "font-baskerville text-xl leading-loose select-none"
                 ]
                 [ menuButton closeMsg
                 , Html.div
@@ -132,4 +132,10 @@ menuButton msg =
 
 viewEntry : NavEntry -> Html msg
 viewEntry entry =
-    Html.li [] [ Html.a [ Attr.href entry.url ] [ Html.text entry.title ] ]
+    Html.li []
+        [ Html.a
+            [ Attr.href entry.url
+            , Attr.class "text-stone-600 hover:text-sky-700"
+            ]
+            [ Html.text entry.title ]
+        ]
