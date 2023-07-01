@@ -14,8 +14,7 @@ view navMsg nav =
         , Attr.class "border-b-2 border-t-10"
         , Attr.class "h-14"
         ]
-        [ Nav.view navMsg nav
-        , Html.div
+        [ Html.div
             [ Attr.class "w-full md:w-192 lg:w-full pl-4"
             , Attr.class Styles.largeGrid
             , Attr.id "Header"
@@ -26,4 +25,5 @@ view navMsg nav =
                 ]
                 [ Html.a [ Attr.href "/" ] [ Html.text "Little Bo Peep" ] ]
             ]
+        , Nav.view navMsg nav
         ]

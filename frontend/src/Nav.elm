@@ -102,8 +102,9 @@ view : NavMsg msg -> Nav -> Html msg
 view { openMsg, closeMsg } nav =
     case nav.state of
         Open ->
-            Html.div [ Attr.class "z-50 fixed left-0 flex self-start" ]
-                [ Html.div
+            Html.div [ Attr.class "z-50 fixed right-0 flex self-start" ]
+                [ button closeMsg
+                , Html.div
                     [ Attr.class "h-screen z-50 p-4"
                     , Attr.class "bg-stone-100 h-full"
                     ]
@@ -111,13 +112,16 @@ view { openMsg, closeMsg } nav =
                 ]
 
         Closed ->
-            Html.button [ Attr.class "h-10 w-10" ]
-                [ Html.img
-                    [ Attr.src <| Assets.image "hamburger.svg"
-                    , onClick openMsg
-                    ]
-                    []
-                ]
+            button openMsg
+
+
+button : msg -> Html msg
+button msg =
+    Html.button
+        [ Attr.class "grow-0 m-3 flex items-center justify-center h-8 w-9 bg-teal-200 rounded"
+        , onClick msg
+        ]
+        [ Html.img [ Attr.src <| Assets.image "hamburger.svg" ] [] ]
 
 
 viewEntry : NavEntry -> Html msg

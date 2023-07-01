@@ -130,6 +130,13 @@ update msg model =
             , Cmd.none
             )
 
+        ( Loaded urlData data, CloseNav ) ->
+            ( Loaded
+                urlData
+                { data | nav = Nav.close data.nav }
+            , Cmd.none
+            )
+
         ( m, LinkClicked urlRequest ) ->
             case urlRequest of
                 Browser.Internal url ->
