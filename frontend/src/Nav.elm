@@ -5,6 +5,7 @@ import Assets
 import Html exposing (Html)
 import Html.Attributes as Attr
 import Html.Events exposing (onClick)
+import Icon
 import Mark
 import Mark.Error
 
@@ -103,7 +104,7 @@ view { openMsg, closeMsg } nav =
     case nav.state of
         Open ->
             Html.div [ Attr.class "z-50 fixed right-0 flex self-start" ]
-                [ button closeMsg
+                [ menuButton closeMsg
                 , Html.div
                     [ Attr.class "h-screen z-50 p-4"
                     , Attr.class "bg-stone-100 h-full"
@@ -112,16 +113,18 @@ view { openMsg, closeMsg } nav =
                 ]
 
         Closed ->
-            button openMsg
+            Html.div [ Attr.class "absolute lg:fixed right-0" ] [ menuButton openMsg ]
 
 
-button : msg -> Html msg
-button msg =
+menuButton : msg -> Html msg
+menuButton msg =
     Html.button
-        [ Attr.class "grow-0 m-3 flex items-center justify-center h-8 w-9 bg-teal-200 rounded"
+        [ Attr.class "flex items-center justify-center h-8 w-9 m-3"
+        , Attr.class "fill-stone-500 hover:fill-stone-600 bg-white hover:bg-yellow-100 rounded"
+        , Attr.class "transition"
         , onClick msg
         ]
-        [ Html.img [ Attr.src <| Assets.image "hamburger.svg" ] [] ]
+        [ Icon.menu ]
 
 
 viewEntry : NavEntry -> Html msg
