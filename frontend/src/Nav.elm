@@ -1,8 +1,10 @@
 module Nav exposing (..)
 
 import Articles exposing (Articles)
+import Assets
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Html.Events exposing (onClick)
 import Mark
 import Mark.Error
 
@@ -10,6 +12,12 @@ import Mark.Error
 type alias Nav =
     { state : NavState
     , entries : List NavEntry
+    }
+
+
+type alias NavMsg msg =
+    { openMsg : msg
+    , closeMsg : msg
     }
 
 
@@ -22,6 +30,16 @@ type alias NavEntry =
 type NavState
     = Open
     | Closed
+
+
+open : Nav -> Nav
+open nav =
+    { nav | state = Open }
+
+
+close : Nav -> Nav
+close nav =
+    { nav | state = Closed }
 
 
 fromArticles : Articles -> Nav
@@ -80,13 +98,26 @@ metadata =
         |> Mark.toBlock
 
 
-view : Nav -> Html msg
-view nav =
-    Html.div
-        [ Attr.class "fixed right-0 z-50 p-4"
-        , Attr.class "bg-stone-100 h-full"
-        ]
-        [ Html.ul [] <| List.map viewEntry nav.entries ]
+view : NavMsg msg -> Nav -> Html msg
+view { openMsg, closeMsg } nav =
+    case nav.state of
+        Open ->
+            Html.div [ Attr.class "z-50 fixed left-0 flex self-start" ]
+                [ Html.div
+                    [ Attr.class "h-screen z-50 p-4"
+                    , Attr.class "bg-stone-100 h-full"
+                    ]
+                    [ Html.ul [] <| List.map viewEntry nav.entries ]
+                ]
+
+        Closed ->
+            Html.button [ Attr.class "h-10 w-10" ]
+                [ Html.img
+                    [ Attr.src <| Assets.image "hamburger.svg"
+                    , onClick openMsg
+                    ]
+                    []
+                ]
 
 
 viewEntry : NavEntry -> Html msg

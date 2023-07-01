@@ -86,6 +86,8 @@ type Msg
     | UrlChanged Url
     | LinkClicked Browser.UrlRequest
     | GotArticles (Result Http.Error Articles)
+    | OpenNav
+    | CloseNav
 
 
 init : () -> Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
@@ -104,7 +106,9 @@ update msg model =
                     ( Loaded urlData
                         { articles = articles
                         , page = Page.fromUrl urlData.url
-                        , nav = Nav.fromArticles articles
+                        , nav =
+                            Nav.fromArticles
+                                articles
                         }
                     , Cmd.none
                     )
@@ -116,6 +120,13 @@ update msg model =
             ( Loaded
                 { urlData | url = url }
                 { data | page = Page.fromUrl url }
+            , Cmd.none
+            )
+
+        ( Loaded urlData data, OpenNav ) ->
+            ( Loaded
+                urlData
+                { data | nav = Nav.open data.nav }
             , Cmd.none
             )
 
@@ -158,7 +169,10 @@ view model =
                 [ Html.div
                     [ Attr.class "w-full" ]
                     [ Header.view
-                    , Nav.view data.nav
+                        { openMsg = OpenNav
+                        , closeMsg = CloseNav
+                        }
+                        data.nav
                     , Html.div [ Attr.class "pt-14 lg:pt-20" ]
                         [ case data.page of
                             Page.Home ->
