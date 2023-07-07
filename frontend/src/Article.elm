@@ -80,6 +80,7 @@ view data =
                     ]
                     html.body
                 , sideBarButton data
+                , returnButton data
                 ]
 
         Mark.Almost { result, errors } ->
@@ -122,12 +123,27 @@ sideBarButton data =
                 Attr.class "opacity-100 -translate-x-3/4 md:-translate-x-[85%]"
         , onClick data.hideThoughtMsg
         ]
-        [ Html.div
-            [ Attr.class "col-start-1 flex items-center justify-center" ]
-            [ Icon.sideArrowLeft ]
-        , Html.div
-            [ Attr.class "col-start-4 flex items-center justify-center" ]
-            [ Icon.sideArrowLeft ]
+        []
+
+
+returnButton : ArticleData msg -> Html msg
+returnButton data =
+    Html.button
+        [ case data.articleState of
+            ShowArticle ->
+                Attr.class "hidden opacity-0"
+
+            ShowSideRight ->
+                Attr.class "fixed right-0 bottom-0 opacity-100"
+        , Attr.class "transition-all rounded-tl-full bg-blue-100 hover:bg-blue-200"
+        , Attr.class "w-12 h-12 hover:w-14 hover:h-14"
+        , Attr.class "flex items-center justify-center"
+        , onClick data.hideThoughtMsg
+        ]
+        [ Html.img
+            [ Attr.src <| Assets.image "back_arrow.svg"
+            ]
+            []
         ]
 
 
