@@ -219,31 +219,15 @@ imageRight data =
 viewImageRight : ArticleData msg -> String -> String -> String -> Html msg
 viewImageRight data img offsetX offsetY =
     let
-        imageButton =
-            Html.button
-                [ Attr.class "lg:hidden"
-                , Attr.class "transition-opacity duration-300"
-                , Attr.class "-ml-10 mt-16"
-                , case data.articleState of
-                    ShowArticle ->
-                        Attr.class "opacity-100"
-
-                    ShowSideRight ->
-                        Attr.class "opacity-0"
-                , onClick data.showThoughtMsg
-                ]
-                [ Icon.arrowUp ]
-
         image =
-            Html.div
+            Html.button
                 [ case data.articleState of
-                    ShowArticle ->
-                        Attr.class "opacity-0"
-
                     ShowSideRight ->
-                        Attr.class "opacity-100"
+                        onClick data.hideThoughtMsg
+
+                    ShowArticle ->
+                        onClick data.showThoughtMsg
                 , Attr.class "flex shrink-0"
-                , Attr.class "pointer-events-none"
                 , Attr.class "transition-opacity duration-300"
                 , Attr.class "lg:transition-none lg:opacity-100"
                 , Attr.style "transform"
@@ -262,8 +246,7 @@ viewImageRight data img offsetX offsetY =
     Html.div
         [ Attr.class "col-start-3 h-0 flex items-center justify-start"
         ]
-        [ imageButton
-        , image
+        [ image
         ]
 
 
