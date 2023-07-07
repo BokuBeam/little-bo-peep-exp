@@ -28,6 +28,7 @@
             fd
             nodejs
             rust
+            cargo-watch
           ];
 
           shellHook = ''
