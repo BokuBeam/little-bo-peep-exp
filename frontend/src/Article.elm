@@ -136,7 +136,7 @@ paragraph data =
     Mark.block "Paragraph"
         (Html.p
             [ Attr.class "relative text-xl sm:leading-relaxed"
-            , Attr.class "-translate-x-3/4 lg:translate-x-0"
+            , Attr.class "-translate-x-[1000px] lg:translate-x-0"
             , Attr.class Styles.smallGrid
             , Attr.class Styles.largeGrid
             ]
@@ -154,7 +154,7 @@ paragraphFlat data =
     Mark.block "ParagraphFlat"
         (Html.p
             [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
-            , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
+            , Attr.class "-translate-x-[1000px] lg:translate-x-0"
             , Attr.class Styles.smallGrid
             , Attr.class Styles.largeGrid
             ]
