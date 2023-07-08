@@ -167,7 +167,7 @@ view model =
     case model of
         Loading _ ->
             { title = "Little Bo Peep"
-            , body = [ Html.div [] [ Html.text "Loading" ] ]
+            , body = [ Html.div [ Attr.class "w-full" ] [ Header.viewEmpty ] ]
             }
 
         Loaded _ data ->
@@ -208,5 +208,5 @@ view model =
 
         Error _ ->
             { title = "Little Bo Beep"
-            , body = [ Html.div [] [ Html.text "Error" ] ]
+            , body = [ Html.div [ Attr.class "w-full" ] [ Header.viewEmpty ] ]
             }

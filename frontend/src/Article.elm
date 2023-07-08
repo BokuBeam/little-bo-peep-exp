@@ -64,8 +64,13 @@ view data =
         Mark.Success html ->
             Html.div
                 [ Attr.id "Article"
-                , Attr.class "w-full"
-                , Attr.class "absolute flex justify-center align-center"
+                , Attr.class "absolute flex justify-center align-center animate-appear"
+                , case data.articleState of
+                    ShowSideRight ->
+                        Attr.class "w-full"
+
+                    ShowArticle ->
+                        Attr.class "w-full overflow-hidden"
                 ]
                 [ Html.div
                     [ Attr.class "w-full md:w-192 lg:w-full transition duration-300"
@@ -73,13 +78,14 @@ view data =
                     , Attr.class "lg:translate-x-0"
                     , case data.articleState of
                         ShowArticle ->
-                            Attr.class "overflow-hidden"
+                            Attr.class ""
 
                         ShowSideRight ->
                             Attr.class "-translate-x-3/4 md:-translate-x-[85%]"
                     ]
                     html.body
                 , sideBarButton data
+                , returnButton data
                 ]
 
         Mark.Almost { result, errors } ->
@@ -111,7 +117,7 @@ sideBarButton data =
     Html.button
         [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50"
         , Attr.class "transition duration-300"
-        , Attr.class "lg:hidden fixed grid grid-cols-4 justify-end items-center"
+        , Attr.class "lg:hidden absolute grid grid-cols-4 justify-end items-center"
         , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
         , Attr.style "-webkit-tap-highlight-color" "transparent"
         , case data.articleState of
@@ -122,12 +128,28 @@ sideBarButton data =
                 Attr.class "opacity-100 -translate-x-3/4 md:-translate-x-[85%]"
         , onClick data.hideThoughtMsg
         ]
-        [ Html.div
-            [ Attr.class "col-start-1 flex items-center justify-center" ]
-            [ Icon.sideArrowLeft ]
-        , Html.div
-            [ Attr.class "col-start-4 flex items-center justify-center" ]
-            [ Icon.sideArrowLeft ]
+        []
+
+
+returnButton : ArticleData msg -> Html msg
+returnButton data =
+    Html.button
+        [ case data.articleState of
+            ShowArticle ->
+                Attr.class "opacity-0 pointer-events-none"
+
+            ShowSideRight ->
+                Attr.class "opacity-100"
+        , Attr.class "transition-all rounded-l-full bg-blue-100 hover:bg-blue-200"
+        , Attr.class "w-14 h-14 px-3 hover:w-16"
+        , Attr.class "flex items-center justify-center"
+        , Attr.class "fixed right-0 bottom-4"
+        , onClick data.hideThoughtMsg
+        ]
+        [ Html.img
+            [ Attr.src <| Assets.image "back_arrow.svg"
+            ]
+            []
         ]
 
 
@@ -136,7 +158,7 @@ paragraph data =
     Mark.block "Paragraph"
         (Html.p
             [ Attr.class "relative text-xl sm:leading-relaxed"
-            , Attr.class "-translate-x-3/4 lg:translate-x-0"
+            , Attr.class "-translate-x-[1000px] lg:translate-x-0"
             , Attr.class Styles.smallGrid
             , Attr.class Styles.largeGrid
             ]
@@ -154,7 +176,7 @@ paragraphFlat data =
     Mark.block "ParagraphFlat"
         (Html.p
             [ Attr.class "relative indent-0 text-xl sm:leading-relaxed"
-            , Attr.class "grid -translate-x-3/4 lg:translate-x-0"
+            , Attr.class "-translate-x-[1000px] lg:translate-x-0"
             , Attr.class Styles.smallGrid
             , Attr.class Styles.largeGrid
             ]
@@ -219,33 +241,17 @@ imageRight data =
 viewImageRight : ArticleData msg -> String -> String -> String -> Html msg
 viewImageRight data img offsetX offsetY =
     let
-        imageButton =
-            Html.button
-                [ Attr.class "lg:hidden"
-                , Attr.class "transition-opacity duration-300"
-                , Attr.class "-ml-10 mt-16"
-                , case data.articleState of
-                    ShowArticle ->
-                        Attr.class "opacity-100"
-
-                    ShowSideRight ->
-                        Attr.class "opacity-0"
-                , onClick data.showThoughtMsg
-                ]
-                [ Icon.arrowUp ]
-
         image =
-            Html.div
+            Html.button
                 [ case data.articleState of
-                    ShowArticle ->
-                        Attr.class "opacity-0"
-
                     ShowSideRight ->
-                        Attr.class "opacity-100"
+                        onClick data.hideThoughtMsg
+
+                    ShowArticle ->
+                        onClick data.showThoughtMsg
                 , Attr.class "flex shrink-0"
-                , Attr.class "pointer-events-none"
                 , Attr.class "transition-opacity duration-300"
-                , Attr.class "lg:transition-none lg:opacity-100"
+                , Attr.class "lg:transition-none lg:opacity-100 lg:pointer-events-none"
                 , Attr.style "transform"
                     (String.concat
                         [ "translate("
@@ -262,8 +268,7 @@ viewImageRight data img offsetX offsetY =
     Html.div
         [ Attr.class "col-start-3 h-0 flex items-center justify-start"
         ]
-        [ imageButton
-        , image
+        [ image
         ]
 
 

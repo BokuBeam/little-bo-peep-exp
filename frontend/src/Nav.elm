@@ -107,9 +107,9 @@ view { openMsg, closeMsg } nav =
                 [ Attr.class "z-50 fixed right-0 flex self-start"
                 , Attr.class "font-baskerville text-xl leading-loose select-none"
                 ]
-                [ menuButton closeMsg
+                [ Html.div [ Attr.class "absolute z-50 right-0 top-0" ] [ menuButtonPressed closeMsg ]
                 , Html.div
-                    [ Attr.class "h-screen z-50 p-4"
+                    [ Attr.class "h-screen z-40 px-4 pt-14"
                     , Attr.class "bg-stone-100 h-full"
                     ]
                     [ viewList nav ]
@@ -123,7 +123,18 @@ menuButton : msg -> Html msg
 menuButton msg =
     Html.button
         [ Attr.class "flex items-center justify-center h-8 w-9 m-3"
-        , Attr.class "fill-stone-500 hover:fill-stone-600 bg-white hover:bg-yellow-100 rounded"
+        , Attr.class "fill-stone-500 hover:fill-stone-600 bg-white shadow-md rounded"
+        , Attr.class "transition"
+        , onClick msg
+        ]
+        [ Icon.menu ]
+
+
+menuButtonPressed : msg -> Html msg
+menuButtonPressed msg =
+    Html.button
+        [ Attr.class "flex items-center justify-center h-8 w-9 m-3"
+        , Attr.class "fill-stone-500 hover:fill-stone-600 bg-stone-300 shadow-inner rounded"
         , Attr.class "transition"
         , onClick msg
         ]

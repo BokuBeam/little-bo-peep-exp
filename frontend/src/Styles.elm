@@ -8,4 +8,4 @@ largeGrid =
 
 smallGrid : String
 smallGrid =
-    "grid grid-cols-[75%_100%_75%]"
+    "grid grid-cols-[1000px_100%_1000px]"
