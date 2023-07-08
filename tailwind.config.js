@@ -29,7 +29,7 @@ module.exports = {
       strokeWidth: {
         '1': '1.5px',
         '2': '3px',
-      }
+      },
     },
   },
   plugins: [],

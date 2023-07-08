@@ -136,13 +136,14 @@ returnButton data =
     Html.button
         [ case data.articleState of
             ShowArticle ->
-                Attr.class "hidden opacity-0"
+                Attr.class "opacity-0 pointer-events-none"
 
             ShowSideRight ->
-                Attr.class "fixed right-0 bottom-4 opacity-100"
+                Attr.class "opacity-100"
         , Attr.class "transition-all rounded-l-full bg-blue-100 hover:bg-blue-200"
         , Attr.class "w-14 h-14 px-3 hover:w-16"
         , Attr.class "flex items-center justify-center"
+        , Attr.class "fixed right-0 bottom-4"
         , onClick data.hideThoughtMsg
         ]
         [ Html.img
