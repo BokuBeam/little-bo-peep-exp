@@ -139,9 +139,9 @@ returnButton data =
                 Attr.class "hidden opacity-0"
 
             ShowSideRight ->
-                Attr.class "fixed right-0 bottom-0 opacity-100"
-        , Attr.class "transition-all rounded-tl-full bg-blue-100 hover:bg-blue-200"
-        , Attr.class "w-12 h-12 hover:w-14 hover:h-14"
+                Attr.class "fixed right-0 bottom-4 opacity-100"
+        , Attr.class "transition-all rounded-l-full bg-blue-100 hover:bg-blue-200"
+        , Attr.class "w-14 h-14 px-3 hover:w-16"
         , Attr.class "flex items-center justify-center"
         , onClick data.hideThoughtMsg
         ]
