@@ -250,7 +250,7 @@ viewImageRight data img offsetX offsetY =
                         onClick data.showThoughtMsg
                 , Attr.class "flex shrink-0"
                 , Attr.class "transition-opacity duration-300"
-                , Attr.class "lg:transition-none lg:opacity-100"
+                , Attr.class "lg:transition-none lg:opacity-100 lg:pointer-events-none"
                 , Attr.style "transform"
                     (String.concat
                         [ "translate("
