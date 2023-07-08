@@ -64,7 +64,7 @@ view data =
         Mark.Success html ->
             Html.div
                 [ Attr.id "Article"
-                , Attr.class "absolute flex justify-center align-center"
+                , Attr.class "absolute flex justify-center align-center animate-appear"
                 , case data.articleState of
                     ShowSideRight ->
                         Attr.class "w-full"

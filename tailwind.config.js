@@ -30,6 +30,15 @@ module.exports = {
         '1': '1.5px',
         '2': '3px',
       },
+      animation: {
+        appear: 'appear 0.3s ease 0s 1 normal forwards'
+      },
+      keyframes: {
+        appear: {
+          '0%': { opacity: '0%' },
+          '100%': { opacity: '100%' },
+        }
+      }
     },
   },
   plugins: [],
