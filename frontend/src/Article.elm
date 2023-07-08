@@ -64,8 +64,13 @@ view data =
         Mark.Success html ->
             Html.div
                 [ Attr.id "Article"
-                , Attr.class "w-full"
                 , Attr.class "absolute flex justify-center align-center"
+                , case data.articleState of
+                    ShowSideRight ->
+                        Attr.class "w-full"
+
+                    ShowArticle ->
+                        Attr.class "w-full overflow-hidden"
                 ]
                 [ Html.div
                     [ Attr.class "w-full md:w-192 lg:w-full transition duration-300"
@@ -73,7 +78,7 @@ view data =
                     , Attr.class "lg:translate-x-0"
                     , case data.articleState of
                         ShowArticle ->
-                            Attr.class "overflow-hidden"
+                            Attr.class ""
 
                         ShowSideRight ->
                             Attr.class "-translate-x-3/4 md:-translate-x-[85%]"
