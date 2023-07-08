@@ -117,7 +117,7 @@ sideBarButton data =
     Html.button
         [ Attr.class "z-40 bg-stone-300/50 hover:bg-stone-400/50"
         , Attr.class "transition duration-300"
-        , Attr.class "lg:hidden fixed grid grid-cols-4 justify-end items-center"
+        , Attr.class "lg:hidden absolute grid grid-cols-4 justify-end items-center"
         , Attr.class "w-full md:w-192 lg:w-full h-full lg:translate-0"
         , Attr.style "-webkit-tap-highlight-color" "transparent"
         , case data.articleState of
